@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PlayLyst</string>
     <string name="spotify_login_button">Spotify Login</string>
+    <string name="app_description">Create your own customizable playlists based on your mood</string>
 </resources>
