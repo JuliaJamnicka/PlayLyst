@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">PlayLyst</string>
-    <string name="spotify_login_button">Spotify Authentication</string>
+    <string name="spotify_login_button">Spotify Login</string>
 </resources>

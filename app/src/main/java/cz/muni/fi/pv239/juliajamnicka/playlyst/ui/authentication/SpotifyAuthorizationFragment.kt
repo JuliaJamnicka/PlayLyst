@@ -11,13 +11,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
-import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSpotifyAuthenticationBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSpotifyAuthorizationBinding
 
 class SpotifyAuthorizationFragment : Fragment() {
     private val CLIENT_ID = "97d9d9f74c0e45b5a1bf50328802317c"
     private val REDIRECT_URI = "cz.muni.fi.pv239.juliajamnicka.playlyst://callback"
 
-    private lateinit var binding: FragmentSpotifyAuthenticationBinding
+    private lateinit var binding: FragmentSpotifyAuthorizationBinding
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
@@ -31,7 +31,7 @@ class SpotifyAuthorizationFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentSpotifyAuthenticationBinding.inflate(layoutInflater, container, false)
+        binding = FragmentSpotifyAuthorizationBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
