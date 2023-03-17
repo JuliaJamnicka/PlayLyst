@@ -57,6 +57,4 @@ class SpotifyAuthorizationFragment : Fragment() {
 
         return AuthorizationClient.createLoginActivityIntent(activity, request)
     }
-
-
 }
