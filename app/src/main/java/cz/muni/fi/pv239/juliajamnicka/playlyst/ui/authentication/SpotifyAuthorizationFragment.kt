@@ -13,23 +13,22 @@ import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSpotifyAuthenticationBinding
 
-class SpotifyAuthenticationFragment : Fragment() {
-    private val REQUEST_CODE = 1330
+class SpotifyAuthorizationFragment : Fragment() {
     private val CLIENT_ID = "97d9d9f74c0e45b5a1bf50328802317c"
     private val REDIRECT_URI = "cz.muni.fi.pv239.juliajamnicka.playlyst://callback"
+
+    private lateinit var binding: FragmentSpotifyAuthenticationBinding
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val response = AuthorizationClient.getResponse(it.resultCode, it.data)
 
-            if (response.type === AuthorizationResponse.Type.TOKEN) {
-                val token = response.accessToken
-                val expiresIn = response.expiresIn
+            if (response.type === AuthorizationResponse.Type.CODE) {
+                val code = response.code
+                //return this to higher activity
             }
         }
     }
-
-    private lateinit var binding: FragmentSpotifyAuthenticationBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpotifyAuthenticationBinding.inflate(layoutInflater, container, false)
@@ -48,12 +47,13 @@ class SpotifyAuthenticationFragment : Fragment() {
 
     private fun createSpotifyAuthenticationIntent(): Intent {
         val builder =
-            AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI)
+            AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.CODE, REDIRECT_URI)
 
         builder.setScopes(arrayOf("streaming", "ugc-image-upload", "app-remote-control",
             "playlist-modify-private", "playlist-modify-public"))
+        builder.setShowDialog(true)
+        // setting a state is recommended, maybe add later?
         val request = builder.build()
-
 
         return AuthorizationClient.createLoginActivityIntent(activity, request)
     }
