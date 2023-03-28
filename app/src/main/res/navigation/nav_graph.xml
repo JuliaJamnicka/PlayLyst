@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/spotifyAuthorizationFragment">
+    <fragment
+        android:id="@+id/spotifyAuthorizationFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.authentication.SpotifyAuthorizationFragment"
+        android:label="fragment_spotify_authorization"
+        tools:layout="@layout/fragment_spotify_authorization" />
+</navigation>
