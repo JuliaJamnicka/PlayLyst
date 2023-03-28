@@ -1,8 +1,10 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.authentication
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +32,14 @@ class SpotifyAuthorizationFragment : Fragment() {
             if (response.type === AuthorizationResponse.Type.CODE) {
                 code = response.code
             }
+
+            val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
+            with (preferences.edit()) {
+                putString("spotify_authorization_code", code)
+                apply()
+            }
+
+            Log.d("SPOT_AUTH_CODE", preferences.getString("spotify_authorization_code", "")!!)
         }
     }
 
@@ -48,8 +58,14 @@ class SpotifyAuthorizationFragment : Fragment() {
             }
         }
 
-        parentFragmentManager.setFragmentResult("request_code",
-            bundleOf("response_code" to code))
+        // DUPLICATED for hardcoded access code, will remove later
+        val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
+        with (preferences.edit()) {
+            putString("spotify_authorization_code", code)
+            apply()
+        }
+
+        Log.d("SPOT_AUTH_CODE", preferences.getString("spotify_authorization_code", "")!!)
     }
 
     private fun createSpotifyAuthenticationIntent(): Intent {
