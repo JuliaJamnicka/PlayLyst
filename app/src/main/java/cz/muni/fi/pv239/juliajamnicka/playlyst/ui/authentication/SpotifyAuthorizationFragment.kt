@@ -34,7 +34,7 @@ class SpotifyAuthorizationFragment : Fragment() {
     private lateinit var binding: FragmentSpotifyAuthorizationBinding
 
     //just temporary to not make Spotify sus of the repeated calls
-    private var code: String = ""//"AQDPjxbTMll7fkCi-ei80WOF93OXZdEvPO7kzrBdRZ6oFrvc3FLsjaaI4FURssZc4mNYU27GZu7ZxmDPb1MY4qdoMoBeHNGxylP3Yfp0CLiMIBn175kNx9_URpiew4A0ClKK04AwKmFPJUcL7NTPe-HVjYFTq5i7KrAmuPkhEmtg8g_i5CDlrTNiL41T6BF0-n-k25QD9gb_1m6ObJqK3-p76avW2zMiy5iT6EK_sFZcVurG2istT3cuXBv2-0W25jv6VnIyBzAYVJ03UmywfqI9WB8_IOdTu4XZbpdNKyY5ULgAVv5ghEeLN25qTp5jo37zao4PdaE"
+    private var code: String = ""
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
@@ -54,6 +54,7 @@ class SpotifyAuthorizationFragment : Fragment() {
                 with (preferences.edit()) {
                     putString("token", accessTokenResponse.access_token)
                     putString("refresh-token", accessTokenResponse.refresh_token)
+                    apply()
                     // surely not like this, expires_in also needs to be saved and checked
                     // but that's a problem for future me
                     Toast.makeText(context, accessTokenResponse.access_token, Toast.LENGTH_SHORT).show()
@@ -72,6 +73,8 @@ class SpotifyAuthorizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
+
+        //code = preferences.getString("spotify_authorization_code", null) ?: ""
 
         binding.loginButton.setOnClickListener {
             if (code.isEmpty()) {
