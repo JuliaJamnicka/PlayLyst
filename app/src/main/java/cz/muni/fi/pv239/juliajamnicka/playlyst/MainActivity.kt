@@ -1,7 +1,9 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ActivityMainBinding
 
@@ -11,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen: SplashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 

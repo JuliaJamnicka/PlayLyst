@@ -41,6 +41,9 @@ dependencies {
     // KT
     implementation "androidx.core:core-ktx:1.9.0"
 
+    //SPLASH SCREEN
+    implementation "androidx.core:core-splashscreen:1.0.0"
+
     // NAVIGATION
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -54,6 +57,9 @@ dependencies {
     def retrofit_version = "2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+
+    // DATASTORE
+    implementation "androidx.datastore:datastore:1.0.0"
 
     // SPOTIFY
     implementation 'com.spotify.android:auth:1.2.5'
