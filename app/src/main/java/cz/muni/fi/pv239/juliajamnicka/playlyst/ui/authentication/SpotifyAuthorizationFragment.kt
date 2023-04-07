@@ -81,6 +81,8 @@ class SpotifyAuthorizationFragment : Fragment() {
                 val intent = createSpotifyAuthenticationIntent()
                 launcher.launch(intent)
             }
+
+            findNavController().navigate(SpotifyAuthorizationFragmentDirections.actionSpotifyAuthorizationFragmentToPlaylistFragment())
         }
 
     }

@@ -8,5 +8,14 @@
         android:id="@+id/spotifyAuthorizationFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.authentication.SpotifyAuthorizationFragment"
         android:label="fragment_spotify_authorization"
-        tools:layout="@layout/fragment_spotify_authorization" />
+        tools:layout="@layout/fragment_spotify_authorization" >
+        <action
+            android:id="@+id/action_spotifyAuthorizationFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" />
 </navigation>
