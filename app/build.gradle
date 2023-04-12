@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id "androidx.navigation.safeargs.kotlin"
+    id "org.jetbrains.kotlin.kapt"
 }
 
 android {
@@ -40,7 +41,7 @@ android {
 
 dependencies {
     // KT
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.core:core-ktx:1.10.0"
 
     //SPLASH SCREEN
     implementation "androidx.core:core-splashscreen:1.0.0"
@@ -70,4 +71,11 @@ dependencies {
 
     // SPOTIFY APP REMOTE
     implementation files('libs/spotify-app-remote-release-0.7.2.aar')
+    implementation "com.google.code.gson:gson:2.9.0"
+
+    //DATABASE
+    def room_version = "2.5.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }
