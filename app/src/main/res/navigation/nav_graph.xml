@@ -10,12 +10,21 @@
         android:label="fragment_spotify_authorization"
         tools:layout="@layout/fragment_spotify_authorization" >
         <action
-            android:id="@+id/action_spotifyAuthorizationFragment_to_playlistFragment"
-            app:destination="@id/playlistFragment" />
+            android:id="@+id/action_spotifyAuthorizationFragment_to_playlistsFragment"
+            app:destination="@id/playlistsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/playlistFragment"
+        android:id="@+id/songsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsFragment"
-        android:label="fragment_playlist"
+        android:label="fragment_songs"
         tools:layout="@layout/fragment_songs" />
+    <fragment
+        android:id="@+id/playlistsFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.PlaylistsFragment"
+        android:label="fragment_playlists"
+        tools:layout="@layout/fragment_playlists" >
+        <action
+            android:id="@+id/action_playlistsFragment_to_songsFragment"
+            app:destination="@id/songsFragment" />
+    </fragment>
 </navigation>

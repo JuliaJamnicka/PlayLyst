@@ -6,14 +6,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -24,6 +23,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSpotifyAuthor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class SpotifyAuthorizationFragment : Fragment() {
     private val CLIENT_ID = "97d9d9f74c0e45b5a1bf50328802317c"
@@ -67,6 +67,8 @@ class SpotifyAuthorizationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpotifyAuthorizationBinding.inflate(layoutInflater, container, false)
+        //(requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
+
         return binding.root
     }
 
@@ -82,7 +84,8 @@ class SpotifyAuthorizationFragment : Fragment() {
                 launcher.launch(intent)
             }
 
-            findNavController().navigate(SpotifyAuthorizationFragmentDirections.actionSpotifyAuthorizationFragmentToPlaylistFragment())
+            findNavController().navigate(SpotifyAuthorizationFragmentDirections
+                    .actionSpotifyAuthorizationFragmentToPlaylistsFragment())
         }
 
     }

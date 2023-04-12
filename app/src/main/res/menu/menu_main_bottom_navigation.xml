@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/playlistsFragment"
+        android:icon="@drawable/playlists_icon_selector"
+        android:title="@string/bottom_nav_playlists_title" />
+    <item
+        android:id="@+id/createPlaylistFragment"
+        android:icon="@drawable/plus_icon_selector"
+        android:title="@string/bottom_nav_create_new_title" />
+    <item
+        android:id="@+id/songsFragment"
+        android:icon="@drawable/moods_icon_selector"
+        android:title="@string/bottom_nav_moods_title" />
+</menu>
