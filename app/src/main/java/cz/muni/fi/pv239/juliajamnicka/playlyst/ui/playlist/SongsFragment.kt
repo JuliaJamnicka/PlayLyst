@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSongsBinding
 
-class PlaylistFragment : Fragment() {
-    private lateinit var binding: FragmentPlaylistBinding
+class SongsFragment : Fragment() {
+    private lateinit var binding: FragmentSongsBinding
 
-    private val adapter: PlaylistAdapter by lazy {
-        PlaylistAdapter(
+    private val adapter: SongsAdapter by lazy {
+        SongsAdapter(
             onItemClick = { song ->
                 {}
             }
@@ -27,7 +27,7 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlaylistBinding.inflate(layoutInflater, container, false)
+        binding = FragmentSongsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

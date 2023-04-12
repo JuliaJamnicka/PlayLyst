@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/playlistFragment"
-        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.PlaylistFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsFragment"
         android:label="fragment_playlist"
-        tools:layout="@layout/fragment_playlist" />
+        tools:layout="@layout/fragment_songs" />
 </navigation>

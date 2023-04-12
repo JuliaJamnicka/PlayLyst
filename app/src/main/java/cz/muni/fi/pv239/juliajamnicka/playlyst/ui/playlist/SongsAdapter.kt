@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemPlaylistSongBinding
 
-class PlaylistAdapter(
+class SongsAdapter(
     private val onItemClick: (Song) -> Unit,
 ) : ListAdapter<Song, SongViewHolder>(SongDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder =
