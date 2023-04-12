@@ -84,8 +84,9 @@ class SpotifyAuthorizationFragment : Fragment() {
                 launcher.launch(intent)
             }
 
-            findNavController().navigate(SpotifyAuthorizationFragmentDirections
-                    .actionSpotifyAuthorizationFragmentToPlaylistsFragment())
+            // this kills my background thread :/ move the whole thing to mainActivity?
+            //findNavController().navigate(SpotifyAuthorizationFragmentDirections
+            //        .actionSpotifyAuthorizationFragmentToPlaylistsFragment())
         }
 
     }
