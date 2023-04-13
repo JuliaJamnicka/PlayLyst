@@ -1,11 +1,6 @@
-package cz.muni.fi.pv239.juliajamnicka.playlyst.database
+package cz.muni.fi.pv239.juliajamnicka.playlyst.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity
-data class MoodEntity(
-    @PrimaryKey(autoGenerate = true)
+data class Mood(
     val id: Long,
     val name: String,
     val color: String,
