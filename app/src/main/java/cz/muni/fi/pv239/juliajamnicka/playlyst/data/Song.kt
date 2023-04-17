@@ -1,5 +1,9 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.data
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Song(
     val id: String,
     val uri: String,
@@ -7,4 +11,4 @@ data class Song(
     val artist: String, // change this later
     val genre: String,
     val imageLink: String?
-) {}
+): Parcelable

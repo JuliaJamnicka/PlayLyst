@@ -31,4 +31,10 @@ interface PlaylistDao {
 
     @Query("DELETE FROM PlaylistEntity")
     fun deleteAllPlaylists()
+
+    @Query("DELETE FROM SongEntity")
+    fun deleteAllSongs()
+
+    @Query("DELETE FROM PlaylistAndSongEntity")
+    fun deleteAllPlaylistAndSong()
 }

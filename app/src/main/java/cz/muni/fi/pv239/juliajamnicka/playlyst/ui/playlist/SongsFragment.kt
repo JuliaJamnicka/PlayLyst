@@ -5,11 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSongsBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 
 class SongsFragment : Fragment() {
     private lateinit var binding: FragmentSongsBinding
+
+    private val args: SongsFragmentArgs by navArgs()
+
+    private val playlistRepository: PlaylistRepository by lazy {
+        PlaylistRepository(requireContext())
+    }
 
     private val adapter: SongsAdapter by lazy {
         SongsAdapter(
@@ -37,8 +45,12 @@ class SongsFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
+        refreshList()
+
     }
 
-    // TODO refresh and resume to add later
+    private fun refreshList() {
+        adapter.submitList(args.playlist?.songs)
+    }
 
 }

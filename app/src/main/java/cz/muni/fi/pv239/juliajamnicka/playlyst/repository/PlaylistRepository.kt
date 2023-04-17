@@ -3,16 +3,14 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.repository
 import android.content.Context
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.PlaylistAndSong
-import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
-import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PLayLystDatabase
+import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlayLystDatabase
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistDao
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toAppData
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toEntity
-import java.util.*
 
 class PlaylistRepository(
     context : Context,
-    private val dao : PlaylistDao = PLayLystDatabase.create(context).playlistDao()
+    private val dao : PlaylistDao = PlayLystDatabase.create(context).playlistDao()
 ) {
 
     fun saveOrUpdate(playlist: Playlist) {
@@ -36,4 +34,9 @@ class PlaylistRepository(
     fun deletePlaylists() =
         dao.deleteAllPlaylists()
 
+    fun deleteSongs() =
+        dao.deleteAllSongs()
+
+    fun deleteAllPlaylistAnSongs() =
+        dao.deleteAllPlaylistAndSong()
 }

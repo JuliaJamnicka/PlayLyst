@@ -12,12 +12,12 @@ import androidx.room.RoomDatabase
         PLaylistAndSongEntity::class],
 version = 1
 )
-abstract class PLayLystDatabase : RoomDatabase() {
+abstract class PlayLystDatabase : RoomDatabase() {
     companion object {
         private const val NAME = "playlyst.db"
 
-        fun create(context: Context): PLayLystDatabase =
-            Room.databaseBuilder(context, PLayLystDatabase::class.java, NAME)
+        fun create(context: Context): PlayLystDatabase =
+            Room.databaseBuilder(context, PlayLystDatabase::class.java, NAME)
                 .allowMainThreadQueries()
                 .build()
     }

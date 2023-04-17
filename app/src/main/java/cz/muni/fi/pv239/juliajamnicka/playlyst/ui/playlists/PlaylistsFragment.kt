@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 
@@ -20,13 +22,11 @@ class PlaylistsFragment : Fragment() {
     private val adapter: PlaylistsAdapter by lazy {
         PlaylistsAdapter(
             onItemClick = { playlist ->
-                {}
-            }
+                    findNavController().navigate(
+                        PlaylistsFragmentDirections
+                            .actionPlaylistsFragmentToSongsFragment(playlist = playlist))
+            },
         )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -36,13 +36,17 @@ class PlaylistsFragment : Fragment() {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
 
         playlistRepository.deletePlaylists()
+        playlistRepository.deleteSongs()
+        playlistRepository.deleteAllPlaylistAnSongs()
+
         playlistRepository.saveOrUpdate(
             Playlist(
                 id = "spotify-id",
                 uri = "hello",
                 name = "Modern Violin",
                 imageLink = "",
-                songs = emptyList()
+                songs = listOf<Song>(Song(id = "id", uri = "", name = "Young and Beautiful",
+                artist = "Lana Del Rey", genre = "Pop", imageLink = ""))
             )
         )
         playlistRepository.saveOrUpdate(
