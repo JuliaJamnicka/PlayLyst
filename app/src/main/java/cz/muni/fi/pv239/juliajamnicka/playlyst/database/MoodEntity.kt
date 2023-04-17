@@ -6,19 +6,19 @@ import androidx.room.PrimaryKey
 @Entity
 data class MoodEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val moodId: Long,
     val name: String,
     val color: String,
-    val acousticness: Number?,
-    val danceability: Number?,
-    val energy: Number?,
-    val instrumentalness: Number?,
-    val key: Number?,
-    val liveness: Number?,
-    val loudness:Number?,
-    val mode: Number?,
-    val popularity: Number?,
-    val speechiness: Number?,
-    val tempo: Number?,
-    val valence: Number?
+    val acousticness: Int?,
+    val danceability: Int?,
+    val energy: Int?,
+    val instrumentalness: Int?,
+    val key: Int?,
+    val liveness: Int?,
+    val loudness:Int?,
+    val mode: Int?,
+    val popularity: Int?,
+    val speechiness: Int?,
+    val tempo: Int?,
+    val valence: Int?
 )

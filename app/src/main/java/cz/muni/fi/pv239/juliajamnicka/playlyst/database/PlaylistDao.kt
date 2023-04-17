@@ -19,19 +19,10 @@ interface PlaylistDao {
     @Delete
     fun deleteSong(song: SongEntity)
 
-    // Insert a playlist with its associated songs
     @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPlaylistWithSongs(playlistWithSongs: PlaylistWithSongs)
+    @Query("SELECT * FROM PlaylistEntity")
+    fun getPlaylistsWithSongs(): List<PlaylistWithSongs>
 
-    @Transaction
-    @Delete
-    fun deletePlaylistWithSongs(playlistWithSongs: PlaylistWithSongs)
-
-    @Transaction
-    @Query("SELECT * FROM playlist WHERE playlistId = :playlistId")
-    fun getPlaylistWithSongsById(playlistId: Long): PlaylistWithSongs
-
-    @Query("SELECT * FROM playlist")
+    @Query("SELECT * FROM PlaylistEntity")
     fun getAllPlaylists(): List<PlaylistEntity>
 }
