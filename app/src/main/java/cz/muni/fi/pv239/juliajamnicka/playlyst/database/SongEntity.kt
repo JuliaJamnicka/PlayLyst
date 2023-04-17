@@ -5,9 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class SongEntity(
-    @PrimaryKey(autoGenerate = true)
-    val songId: Long,
+    @PrimaryKey
+    val songId: String,
     val uri: String,
     val name: String,
-    val imageLink: String
+    val artist : String,
+    val genre : String,
+    val imageLink: String?
 )

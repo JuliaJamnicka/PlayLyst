@@ -6,10 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistsBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 
 class PlaylistsFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistsBinding
+
+    private val playlistRepository: PlaylistRepository by lazy {
+        PlaylistRepository(requireContext())
+    }
 
     private val adapter: PlaylistsAdapter by lazy {
         PlaylistsAdapter(
@@ -28,6 +34,28 @@ class PlaylistsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+
+        playlistRepository.deletePlaylists()
+        playlistRepository.saveOrUpdate(
+            Playlist(
+                id = "spotify-id",
+                uri = "hello",
+                name = "Modern Violin",
+                imageLink = "",
+                songs = emptyList()
+            )
+        )
+        playlistRepository.saveOrUpdate(
+            Playlist(
+                id = "spotify-id-2",
+                uri = "hello",
+                name = "my life is a movie",
+                imageLink = "",
+                songs = emptyList()
+            ),
+        )
+        refreshList()
+
         return binding.root
     }
 
@@ -37,5 +65,9 @@ class PlaylistsFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
+    }
+
+    private fun refreshList() {
+        adapter.submitList(playlistRepository.getAllPlaylists())
     }
 }

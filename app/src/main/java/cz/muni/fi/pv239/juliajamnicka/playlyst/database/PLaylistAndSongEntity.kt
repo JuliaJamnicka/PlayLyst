@@ -4,6 +4,6 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = ["playlistId", "songId"],)
 data class PLaylistAndSongEntity(
-    val playlistId: Long,
-    val songId: Long
+    val playlistId: String,
+    val songId: String
 )
