@@ -10,9 +10,15 @@ interface MoodDao {
     @Query("SELECT * FROM MoodEntity WHERE moodId = :moodId")
     fun getMoodById(moodId: Long): MoodEntity
 
+    @Query("SELECT * FROM MoodEntity")
+    fun getAllMoods(): List<MoodEntity>
+
     @Update
     fun updateMood(mood: MoodEntity)
 
     @Delete
     fun deleteMood(mood: MoodEntity)
+
+    @Query("DELETE FROM MoodEntity")
+    fun deleteAllMoods()
 }
