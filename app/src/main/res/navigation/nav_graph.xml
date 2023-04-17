@@ -17,7 +17,13 @@
         android:id="@+id/songsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsFragment"
         android:label="fragment_songs"
-        tools:layout="@layout/fragment_songs" />
+        tools:layout="@layout/fragment_songs" >
+        <argument
+            android:name="playlist"
+            app:argType="cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/playlistsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.PlaylistsFragment"
