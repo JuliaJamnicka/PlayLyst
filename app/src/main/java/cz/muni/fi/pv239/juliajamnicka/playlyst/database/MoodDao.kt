@@ -11,8 +11,8 @@ interface MoodDao {
     fun getMoodById(moodId: Long): MoodEntity
 
     @Update
-    fun updateMood(playlist: MoodEntity)
+    fun updateMood(mood: MoodEntity)
 
     @Delete
-    fun deletePlaylist(playlist: PlaylistEntity)
+    fun deleteMood(mood: MoodEntity)
 }
