@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [MoodEntity::class,
+        MoodAttributeEntity::class,
         PlaylistEntity::class,
         SongEntity::class,
         PLaylistAndSongEntity::class],

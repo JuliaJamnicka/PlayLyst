@@ -33,4 +33,23 @@
             android:id="@+id/action_playlistsFragment_to_songsFragment"
             app:destination="@id/songsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/moodsFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods.MoodsFragment"
+        android:label="fragment_moods"
+        tools:layout="@layout/fragment_moods" >
+        <action
+            android:id="@+id/action_moodsFragment_to_moodAddEditFragment"
+            app:destination="@id/moodAddEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moodAddEditFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods.MoodAddEditFragment"
+        android:label="MoodAddEditFragment" >
+        <argument
+            android:name="mood"
+            app:argType="cz.muni.fi.pv239.juliajamnicka.playlyst.data.Mood"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>
