@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodsBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
 
 class MoodsFragment : Fragment() {
     private lateinit var binding: FragmentMoodsBinding
-
+    private val moodRepository: MoodRepository by lazy {
+        MoodRepository(requireContext())
+    }
     private val adapter : MoodsAdapter by lazy {
         MoodsAdapter(
-            onItemClick = { mood ->
-                {}
+            onItemClick = { mood -> {}
             }
         )
     }
@@ -37,6 +39,10 @@ class MoodsFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
+    }
+
+    private fun refreshList() {
+        adapter.submitList(moodRepository.getAllMoods())
     }
 
 }

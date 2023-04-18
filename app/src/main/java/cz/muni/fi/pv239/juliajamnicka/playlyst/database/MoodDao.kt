@@ -1,17 +1,12 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.database
 
 import androidx.room.*
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttribute
 
 @Dao
 interface MoodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMood(entity: MoodEntity): Long
-
-    @Query("SELECT * FROM MoodEntity WHERE moodId = :moodId")
-    fun getMoodById(moodId: Long): MoodEntity
-
-    @Query("SELECT * FROM MoodEntity")
-    fun getAllMoods(): List<MoodEntity>
 
     @Update
     fun updateMood(mood: MoodEntity)
@@ -19,6 +14,19 @@ interface MoodDao {
     @Delete
     fun deleteMood(mood: MoodEntity)
 
+    @Transaction
+    @Query("SELECT * FROM MoodEntity")
+    fun getMoodsWithAttributes(): List<MoodWithAttributes>
+
     @Query("DELETE FROM MoodEntity")
     fun deleteAllMoods()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMoodAttribute(moodAttributeEntity: MoodAttributeEntity)
+
+    @Delete
+    fun deleteMoodAttribute(moodAttributeEntity: MoodAttributeEntity)
+
+    @Query("SELECT * FROM MoodAttributeEntity")
+    fun getAllMoodAttributes(): List<MoodAttributeEntity>
 }

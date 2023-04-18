@@ -11,14 +11,19 @@ class MoodRepository(
     context : Context,
     private val dao : MoodDao = PlayLystDatabase.create(context).moodDao()
 ) {
-    fun saveOrUpdate(mood : Mood) =
+    fun saveOrUpdate(mood : Mood) {
         dao.insertMood(mood.toEntity())
+
+        for (attribute in mood.attributes) {
+            dao.insertMoodAttribute(attribute.toEntity())
+        }
+    }
 
     fun delete(mood : Mood) =
         dao.deleteMood(mood.toEntity())
 
     fun getAllMoods(): List<Mood> =
-        dao.getAllMoods().map { it.toAppData() }
+        dao.getMoodsWithAttributes().map { it.toAppData() }
 
     fun deleteAllMoods() =
         dao.deleteAllMoods()
