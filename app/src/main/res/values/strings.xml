@@ -6,5 +6,6 @@
     <string name="bottom_nav_playlists_title">Playlists</string>
     <string name="bottom_nav_moods_title">Moods</string>
     <string name="bottom_nav_create_new_title">Create</string>
+    <string name="mood_choose_color_name">Choose color to associate with the mood</string>
     <string name="hello_blank_fragment">blank</string>
 </resources>
