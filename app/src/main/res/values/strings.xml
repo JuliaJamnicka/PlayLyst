@@ -7,5 +7,13 @@
     <string name="bottom_nav_moods_title">Moods</string>
     <string name="bottom_nav_create_new_title">Create</string>
     <string name="mood_choose_color_name">Choose color to associate with the mood</string>
+    <string name="mood_choose_name">Call your mood something interesting</string>
     <string name="hello_blank_fragment">blank</string>
+
+    <string name="playlists_title">Playlists</string>
+    <string name="create_playlist_title">Create playlist</string>
+    <string name="moods_title">Moods</string>
+    <string name="create_mood_title">Create mood</string>
+    <string name="edit_playlist_title">Edit playlist</string>
+    <string name="edit_mood_title">Edit mood</string>
 </resources>

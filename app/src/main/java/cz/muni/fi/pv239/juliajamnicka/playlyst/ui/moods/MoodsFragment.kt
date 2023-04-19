@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
 
@@ -16,7 +18,10 @@ class MoodsFragment : Fragment() {
     }
     private val adapter : MoodsAdapter by lazy {
         MoodsAdapter(
-            onItemClick = { mood -> {}
+            onItemClick = { mood ->
+                findNavController()
+                    .navigate(MoodsFragmentDirections
+                        .actionMoodsFragmentToMoodAddEditFragment(mood = mood))
             }
         )
     }
@@ -30,6 +35,10 @@ class MoodsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoodsBinding.inflate(layoutInflater, container, false)
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.supportActionBar?.show()
+
         return binding.root
     }
 
@@ -39,10 +48,21 @@ class MoodsFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
+        binding.createButton.setOnClickListener {
+            findNavController()
+                .navigate(MoodsFragmentDirections
+                    .actionMoodsFragmentToMoodAddEditFragment())
+        }
+
     }
 
     private fun refreshList() {
         adapter.submitList(moodRepository.getAllMoods())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
     }
 
 }

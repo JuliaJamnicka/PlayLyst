@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
+import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil.createSpotifyAccountsApiService
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.AccessTokenResponse
@@ -67,7 +68,10 @@ class SpotifyAuthorizationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpotifyAuthorizationBinding.inflate(layoutInflater, container, false)
-        //(requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
+
+        val mainActivity = requireActivity() as MainActivity
+        //mainActivity.setBottomNavigationVisibility(View.GONE)
+        mainActivity.supportActionBar?.hide()
 
         return binding.root
     }

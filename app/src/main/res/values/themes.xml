@@ -10,10 +10,13 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+
         <!-- Customize your theme here. -->
-        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:navigationBarColor">?attr/colorOnPrimary</item>
         <item name="actionBarTabTextStyle">@style/ActionBar</item>
+        <item name="android:textColor">@color/dark_grey</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -38,5 +41,15 @@
     <style name="ActionBar">
         <item name="android:textColor">@color/purple_500</item>
     </style>
+
+    <style name="BoldTextAppearance">
+        <item name="android:fontFamily">@font/circular_black</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="chipText" parent="TextAppearance.MaterialComponents.Chip">
+        <item name="android:fontFamily">@font/circular</item>
+    </style>
+
 
 </resources>

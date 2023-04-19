@@ -7,10 +7,12 @@
     <color name="pink_2">#FFD6FF</color>
     <color name="teal_200">#5F9C96</color>
     <color name="teal_700">#FF018786</color>
+    <color name="mint_blue">#9EC9E8</color>
     <color name="blue_from_logo">#6E92F4</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#7E7D7D</color>
     <color name="light_grey">#D3D3D3</color>
+    <color name="dark_grey">#2a2a2a</color>
     <color name="transparent">#00000000</color>
 </resources>

@@ -45,7 +45,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.10.0"
 
     //SPLASH SCREEN
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
     // NAVIGATION
     def nav_version = "2.5.3"
@@ -53,7 +53,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //implementation 'androidx.compose.material:material:1.4.1'
-    //implementation "androidx.compose.material3:material3:1.0.1"
+    implementation "androidx.compose.material3:material3:1.0.1"
 
     // RETROFIT
     def retrofit_version = "2.9.0"
