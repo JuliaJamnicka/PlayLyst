@@ -23,10 +23,10 @@
 
         <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
              animated drawable. One of these is required. -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_anim_white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_logo_white_animated</item>
         <!-- Required for animated icons -->
         <item name="windowSplashScreenAnimationDuration">1000</item>
-        <item name="android:windowSplashScreenBrandingImage">@drawable/playlist_brand_name</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/playlyst_brand_name</item>
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->
         <item name="postSplashScreenTheme">@style/Theme.PlayLyst</item>
