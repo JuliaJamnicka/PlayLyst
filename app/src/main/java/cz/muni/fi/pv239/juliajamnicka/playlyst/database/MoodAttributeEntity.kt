@@ -9,6 +9,7 @@ data class MoodAttributeEntity(
     val moodAttributeId: Long,
     val moodEntityId: Long,
     val name: String,
-    val minValue: Float,
-    val maxValue: Float
+    val chosenValue: Double? = null,
+    val lowerThreshold : Double? = null,
+    val upperThreshold: Double? = null,
 )

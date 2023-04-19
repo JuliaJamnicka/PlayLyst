@@ -29,11 +29,21 @@ class MoodAttributeViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: MoodAttribute, onItemClick: (MoodAttribute) -> Unit) {
         binding.attributeName.text = item.name
-        binding.slider.valueFrom = item.minValue
-        binding.slider.valueTo = item.maxValue
+        binding.slider.valueFrom = item.minValue.toFloat()
+        binding.slider.valueTo = item.maxValue.toFloat()
+        binding.slider.stepSize = item.stepSize.toFloat()
+        binding.slider.values = listOf(item.lowerDefaultValue?.toFloat(), item.upperDefaultValue?.toFloat())
+
+        binding.lowerSliderValue.text = item.minValue.toString()
+        binding.upperSliderValue.text = item.maxValue.toString()
 
         binding.root.setOnClickListener {
             onItemClick(item)
+        }
+
+        binding.slider.addOnChangeListener { _, _, _ ->
+            val (lowerValue, upperValue) = binding.slider.values
+
         }
     }
 }

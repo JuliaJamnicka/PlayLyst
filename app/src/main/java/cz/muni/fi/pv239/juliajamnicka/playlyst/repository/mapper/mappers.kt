@@ -68,20 +68,27 @@ fun Mood.toEntity(): MoodEntity =
         color = color,
     )
 
-fun MoodAttributeEntity.toAppData(): MoodAttribute =
-    MoodAttribute(
+fun MoodAttributeEntity.toAppData(): MoodAttribute {
+    val thresholds = MoodAttributeType.valueOf(name).getThresholds()
+    return MoodAttribute(
         id = moodAttributeId,
         moodId = moodEntityId,
         name = name,
-        minValue = minValue,
-        maxValue = maxValue
+        minValue = thresholds.minValue,
+        maxValue = thresholds.maxValue,
+        stepSize = thresholds.stepSize,
+        canHaveRange = thresholds.canHaveRange,
+        lowerDefaultValue = thresholds.lowerDefaultValue,
+        upperDefaultValue = thresholds.upperDefaultValue,
+        chosenValue = chosenValue,
+        lowerThreshold = lowerThreshold,
+        upperThreshold = upperThreshold
     )
+}
 
 fun MoodAttribute.toEntity(): MoodAttributeEntity =
     MoodAttributeEntity(
         moodAttributeId = id,
         moodEntityId = moodId,
-        name = name,
-        minValue = minValue,
-        maxValue = maxValue
+        name, chosenValue, lowerThreshold, upperThreshold
     )
