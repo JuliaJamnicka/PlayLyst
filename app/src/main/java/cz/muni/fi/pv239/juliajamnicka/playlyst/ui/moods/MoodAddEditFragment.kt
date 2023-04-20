@@ -30,20 +30,23 @@ class MoodAddEditFragment : Fragment() {
             onItemClick = { _ -> {}
             },
             onSliderChange = { moodAttribute, value, lowerValue, upperValue ->
-                //saveChangedValues(moodAttribute, value, lowerValue, upperValue)
+                saveChangedValues(moodAttribute, value, lowerValue, upperValue)
             }
         )
     }
     private val args: MoodAddEditFragmentArgs by navArgs()
 
-    private lateinit var pickedAttributes: MutableList<MoodAttribute>
+    private val pickedAttributes: MutableList<MoodAttribute> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoodAddEditBinding.inflate(layoutInflater, container, false)
-        pickedAttributes = args.mood?.attributes?.toMutableList() ?: mutableListOf()
+
+        for (attribute in args.mood?.attributes ?: emptyList()) {
+            pickedAttributes.add(attribute.copy())
+        }
         return binding.root
     }
 
@@ -117,8 +120,12 @@ class MoodAddEditFragment : Fragment() {
         val changedAttribute =
             moodAttribute.copyNewWithChangedValues(value, lowerValue, upperValue)
 
-        pickedAttributes.replaceAll {
-            if (it.id == changedAttribute.id) it else changedAttribute  }
+        if (pickedAttributes.find { it.name === changedAttribute.name } === null) {
+            pickedAttributes.add(changedAttribute)
+        } else {
+            pickedAttributes.replaceAll {
+                if (it.name === changedAttribute.name) changedAttribute else it  }
+        }
     }
 
 
