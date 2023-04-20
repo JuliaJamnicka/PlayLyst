@@ -15,7 +15,11 @@ data class MoodAttribute(
     val defaultValue: Double? = null,
     val lowerDefaultValue: Double? = null,
     val upperDefaultValue: Double? = null,
-    val chosenValue: Double? = null,
-    val lowerThreshold : Double? = null,
-    val upperThreshold: Double? = null,
-) : Parcelable
+    val value: Double? = null,
+    val lowerValue : Double? = null,
+    val upperValue: Double? = null,
+) : Parcelable {
+    fun isValueChanged(): Boolean {
+        return value !== null || (lowerValue !== null && upperValue !== null)
+    }
+}

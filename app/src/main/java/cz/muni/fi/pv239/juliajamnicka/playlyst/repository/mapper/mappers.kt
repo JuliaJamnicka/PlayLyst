@@ -80,9 +80,9 @@ fun MoodAttributeEntity.toAppData(): MoodAttribute {
         canHaveRange = thresholds.canHaveRange,
         lowerDefaultValue = thresholds.lowerDefaultValue,
         upperDefaultValue = thresholds.upperDefaultValue,
-        chosenValue = chosenValue,
-        lowerThreshold = lowerThreshold,
-        upperThreshold = upperThreshold
+        value = chosenValue,
+        lowerValue = lowerThreshold,
+        upperValue = upperThreshold
     )
 }
 
@@ -90,5 +90,5 @@ fun MoodAttribute.toEntity(): MoodAttributeEntity =
     MoodAttributeEntity(
         moodAttributeId = id,
         moodEntityId = moodId,
-        name, chosenValue, lowerThreshold, upperThreshold
+        name, value, lowerValue, upperValue
     )

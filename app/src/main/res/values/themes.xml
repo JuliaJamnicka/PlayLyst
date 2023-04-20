@@ -60,7 +60,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Base.Widget.MaterialComponents.TextInputLayout.Mine">
+    <style name="TextInputLayoutMine">
         <item name="hintTextAppearance">@style/CircularTextAppearance</item>
         <item name="placeholderTextAppearance">@style/PlaceholerTextAppearance</item>
         <item name="helperTextTextAppearance">@style/CircularTextAppearance</item>
@@ -69,5 +69,13 @@
         <item name="boxCornerRadiusTopStart">10dp</item>
         <item name="boxBackgroundColor">@color/transparent</item>
     </style>
+
+    <!--<style name="App.Slider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/App.Tooltip</item>
+    </style>
+
+    <style name="App.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="android:textAppearance">@style/CircularTextAppearance</item>
+    </style>-->
 
 </resources>

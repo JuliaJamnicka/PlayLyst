@@ -33,9 +33,9 @@ class MoodRepository(
                 defaultValue = attribute.defaultValue,
                 lowerDefaultValue = attribute.lowerDefaultValue,
                 upperDefaultValue = attribute.upperDefaultValue,
-                chosenValue = attribute.chosenValue,
-                lowerThreshold = attribute.lowerThreshold,
-                upperThreshold = attribute.upperThreshold,
+                value = attribute.value,
+                lowerValue = attribute.lowerValue,
+                upperValue = attribute.upperValue,
             )
             dao.insertMoodAttribute(moodAttribute.toEntity())
         }

@@ -10,12 +10,12 @@ data class AttributeThresholds(
 )
 
 enum class MoodAttributeType {
-    DANCEABILITY, ACOUSTICNESS, POPULARITY, INSTRUMENTALNESS, ENERGY, LIVENESS,
-    LOUDNESS, SPEECHINESS, TEMPO, VALENCE; //KEY, MODE
+    DANCEABILITY, ACOUSTICNESS, POPULARITY, MODE, INSTRUMENTALNESS, ENERGY, LIVENESS,
+    LOUDNESS, SPEECHINESS, TEMPO, VALENCE; //KEY
 
     fun getDescription(): String = when (this) {
         //KEY -> "The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation. Ex: 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1."
-        //MODE -> "Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0."
+        MODE -> "Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0."
         ACOUSTICNESS -> "A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic."
         DANCEABILITY -> "Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is the most danceable."
         ENERGY -> "Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy."
@@ -35,20 +35,20 @@ enum class MoodAttributeType {
             stepSize = 1.0,
             canHaveRange = false,
             defaultValue = 5.0
-        )
+        )*/
         MODE -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 1.0,
             canHaveRange = false,
             defaultValue = 1.0
-        )*/
+        )
         ACOUSTICNESS -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.5,
+            lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
         DANCEABILITY -> AttributeThresholds(
@@ -56,23 +56,23 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.35,
-            upperDefaultValue = 0.65
+            lowerDefaultValue = 0.0,
+            upperDefaultValue = 1.0
         )
         ENERGY -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.35,
-            upperDefaultValue = 0.65
+            lowerDefaultValue = 0.0,
+            upperDefaultValue = 1.0
         )
         INSTRUMENTALNESS -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.5,
+            lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
         LOUDNESS -> AttributeThresholds(
@@ -96,15 +96,15 @@ enum class MoodAttributeType {
             maxValue = 300.0,
             stepSize = 10.0,
             canHaveRange = true,
-            lowerDefaultValue = 10.0,
-            upperDefaultValue = 200.0
+            lowerDefaultValue = 0.0,
+            upperDefaultValue = 300.0
         )
         POPULARITY -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 100.0,
             stepSize = 5.0,
             canHaveRange = true,
-            lowerDefaultValue = 20.0,
+            lowerDefaultValue = 0.0,
             upperDefaultValue = 100.0
         )
         LIVENESS -> AttributeThresholds(
@@ -112,7 +112,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.75,
+            lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
         SPEECHINESS -> AttributeThresholds(
@@ -120,8 +120,8 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
-            lowerDefaultValue = 0.35,
-            upperDefaultValue = 0.65
+            lowerDefaultValue = 0.0,
+            upperDefaultValue = 1.0
         )
     }
 }

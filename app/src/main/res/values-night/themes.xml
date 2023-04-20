@@ -45,4 +45,23 @@
         <item name="android:fontFamily">@font/circular</item>
     </style>
 
+    <style name="CircularTextAppearance">
+        <item name="android:fontFamily">@font/circular_bold</item>
+    </style>
+
+    <style name="PlaceholerTextAppearance">
+        <item name="android:fontFamily">@font/circular_black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextInputLayoutMine">
+        <item name="hintTextAppearance">@style/CircularTextAppearance</item>
+        <item name="placeholderTextAppearance">@style/PlaceholerTextAppearance</item>
+        <item name="helperTextTextAppearance">@style/CircularTextAppearance</item>
+        <item name="prefixTextAppearance">@style/PlaceholerTextAppearance</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxBackgroundColor">@color/transparent</item>
+    </style>
+
 </resources>
