@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import cz.muni.fi.pv239.juliajamnicka.playlyst.R
+import androidx.navigation.fragment.navArgs
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistAddEditBinding
 
 class PlaylistAddEditFragment : Fragment() {

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.*
@@ -26,17 +27,23 @@ class MoodAddEditFragment : Fragment() {
 
     private val adapter : MoodAttributesAdapter by lazy {
         MoodAttributesAdapter(
-            onItemClick = { moodAttribute -> {}
+            onItemClick = { _ -> {}
+            },
+            onSliderChange = { moodAttribute, value, lowerValue, upperValue ->
+                //saveChangedValues(moodAttribute, value, lowerValue, upperValue)
             }
         )
     }
     private val args: MoodAddEditFragmentArgs by navArgs()
+
+    private lateinit var pickedAttributes: MutableList<MoodAttribute>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoodAddEditBinding.inflate(layoutInflater, container, false)
+        pickedAttributes = args.mood?.attributes?.toMutableList() ?: mutableListOf()
         return binding.root
     }
 
@@ -66,8 +73,10 @@ class MoodAddEditFragment : Fragment() {
 
         binding.saveButton.setOnClickListener {
             val name = binding.nameEditText.text.toString()
-            val color = binding.colorEditText.text.toString()
+            val color = "#${binding.colorEditText.text.toString()}"
 
+            moodRepository.saveOrUpdate(name, color, pickedAttributes, args.mood?.id)
+            findNavController().popBackStack()
         }
 
     }
@@ -79,12 +88,13 @@ class MoodAddEditFragment : Fragment() {
             adapter.submitList(createDefaultAttributesList())
         } else {
             adapter.submitList(mood.attributes)
-            binding.colorEditText.setText(mood.color)
+            binding.colorEditText.setText(mood.color.drop(1))
+            binding.colorWheel.imageTintList = ColorStateList.valueOf(Color.parseColor(mood.color))
             binding.nameEditText.setText(mood.name)
         }
     }
 
-    private fun createDefaultAttributesList(): List<MoodAttribute> {
+    private fun createDefaultAttributesList(): MutableList<MoodAttribute> {
         return MoodAttributeType.values().map {
             val thresholds: AttributeThresholds = it.getThresholds()
             MoodAttribute(
@@ -99,7 +109,16 @@ class MoodAddEditFragment : Fragment() {
                 lowerDefaultValue = thresholds.lowerDefaultValue,
                 upperDefaultValue = thresholds.upperDefaultValue
             )
-        }
+        }.toMutableList()
+    }
+
+    private fun saveChangedValues(moodAttribute: MoodAttribute, value: Float?,
+        lowerValue: Float?, upperValue: Float?) {
+        val changedAttribute =
+            moodAttribute.copyNewWithChangedValues(value, lowerValue, upperValue)
+
+        pickedAttributes.replaceAll {
+            if (it.id == changedAttribute.id) it else changedAttribute  }
     }
 
 

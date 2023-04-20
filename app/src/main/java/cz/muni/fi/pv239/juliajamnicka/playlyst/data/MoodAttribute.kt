@@ -22,4 +22,23 @@ data class MoodAttribute(
     fun isValueChanged(): Boolean {
         return value !== null || (lowerValue !== null && upperValue !== null)
     }
+
+    fun copyNewWithChangedValues(value: Float?, lowerValue: Float?, upperValue: Float?)
+    : MoodAttribute {
+        return MoodAttribute(
+            id = id,
+            moodId = moodId,
+            name = name,
+            minValue = minValue,
+            maxValue = maxValue,
+            stepSize = stepSize,
+            canHaveRange = canHaveRange,
+            defaultValue = defaultValue,
+            lowerDefaultValue = lowerDefaultValue,
+            upperDefaultValue = upperDefaultValue,
+            value = value?.toDouble(),
+            lowerValue = lowerValue?.toDouble(),
+            upperValue = upperValue?.toDouble()
+        )
+    }
 }
