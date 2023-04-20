@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodAddEditBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
+import cz.muni.fi.pv239.juliajamnicka.playlyst.util.RandomColorUtil
 
 
 class MoodAddEditFragment : Fragment() {
@@ -47,13 +48,20 @@ class MoodAddEditFragment : Fragment() {
 
         setInitialValues()
 
-        binding.colorEditText.setOnFocusChangeListener { view, hasFocus ->
+        binding.colorEditText.setOnFocusChangeListener { _, hasFocus ->
             val text = binding.colorEditText.text
             if (!hasFocus && text?.isNotEmpty() == true) {
-                binding.colorInput.setStartIconTintList(
+                binding.colorWheel.imageTintList =
                     ColorStateList.valueOf(Color.parseColor("#$text"))
-                )
             }
+        }
+
+        binding.colorWheel.setOnClickListener {
+            val hexColor = RandomColorUtil.getRandomHexColor()
+
+            binding.colorEditText.setText(hexColor)
+            binding.colorWheel.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#$hexColor"))
         }
 
         binding.saveButton.setOnClickListener {
