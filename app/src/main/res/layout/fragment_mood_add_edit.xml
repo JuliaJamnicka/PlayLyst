@@ -13,8 +13,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:label="Name"
+        style="@style/Base.Widget.MaterialComponents.TextInputLayout.Mine"
         app:helperText="@string/mood_choose_name"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +24,8 @@
         android:id="@+id/name_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/circular_bold"
+        android:textSize="20sp"
         android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -36,13 +38,13 @@
         android:layout_marginTop="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintTop_toBottomOf="@id/name_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:placeholderText="F2DB0A"
         app:helperText="@string/mood_choose_color_name"
         app:prefixText="#"
+        style="@style/Base.Widget.MaterialComponents.TextInputLayout.Mine"
         app:startIconDrawable="@drawable/ic_mood_24dp"
         app:startIconTint="#F2DB0A"
         >
@@ -51,6 +53,8 @@
             android:id="@+id/color_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_bold"
+            android:textSize="20sp"
             android:inputType="textCapCharacters" />
 
     </com.google.android.material.textfield.TextInputLayout>
