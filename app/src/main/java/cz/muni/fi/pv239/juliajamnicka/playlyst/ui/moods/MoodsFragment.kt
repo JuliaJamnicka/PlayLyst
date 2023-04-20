@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
+import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
 
@@ -38,6 +39,7 @@ class MoodsFragment : Fragment() {
 
         val mainActivity = requireActivity() as MainActivity
         mainActivity.supportActionBar?.show()
+        mainActivity.title = mainActivity.getString(R.string.moods_title)
 
         return binding.root
     }

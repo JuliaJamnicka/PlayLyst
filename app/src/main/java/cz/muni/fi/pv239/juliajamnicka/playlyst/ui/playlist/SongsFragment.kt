@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
+import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSongsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 
@@ -36,6 +38,11 @@ class SongsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSongsBinding.inflate(layoutInflater, container, false)
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.supportActionBar?.show()
+        mainActivity.title = ""
+
         return binding.root
     }
 
