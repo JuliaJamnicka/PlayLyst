@@ -18,34 +18,29 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.util.capitalizeFirstLetter
 import java.util.*
 
 class MoodAttributesAdapter(
-    private val onItemClick: (MoodAttribute) -> Unit,
-    private val onSliderChange: (moodAttribute: MoodAttribute,
-                                 value: Float?,
-                                 lowerValue: Float?,
-                                 upperValue: Float?) -> Unit,
+    private val onSliderChange: (moodAttribute: MoodAttribute) -> Unit,
 ) : ListAdapter<MoodAttribute, MoodAttributeViewHolder>(MoodAttributeDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoodAttributeViewHolder =
         MoodAttributeViewHolder(
             ItemMoodAttributeBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false),
-            onSliderChange
+                .inflate(LayoutInflater.from(parent.context), parent, false)
         )
 
     override fun onBindViewHolder(holder: MoodAttributeViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onItemClick)
+        holder.bind(item, onSliderChange)
     }
+
 }
 
 
 class MoodAttributeViewHolder(
-    private val binding: ItemMoodAttributeBinding,
-    private val onSliderChange: (moodAttribute: MoodAttribute,
-                                 value: Float?,
-                                 lowerValue: Float?,
-                                 upperValue: Float?) -> Unit,
+    private val binding: ItemMoodAttributeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MoodAttribute, onItemClick: (MoodAttribute) -> Unit) {
+
+    private val sliderTouchListener = OnSliderLetGoListener()
+
+    fun bind(item: MoodAttribute, onSliderChange: (moodAttribute: MoodAttribute) -> Unit) {
         binding.attributeName.text = item.name.capitalizeFirstLetter()
 
         val description = MoodAttributeType.valueOf(item.name).getDescription()
@@ -59,84 +54,45 @@ class MoodAttributeViewHolder(
             binding.infoButton.isSelected = binding.description.isVisible
         }
 
-        if (item.canHaveRange) {
-            bindRangeSlider(item)
-        } else {
-            bindSlider(item)
-        }
-
-        listenToTouch(item)
-
-        binding.lowerSliderValue.text = item.minValue.toString()
-        binding.upperSliderValue.text = item.maxValue.toString()
-
-        binding.root.setOnClickListener {
-            onItemClick(item)
-        }
-    }
-
-    private fun bindSlider(item: MoodAttribute) {
-        binding.slider.visibility = View.VISIBLE
-        binding.rangeSlider.visibility = View.GONE
-
         binding.slider.valueFrom = item.minValue.toFloat()
         binding.slider.valueTo = item.maxValue.toFloat()
         binding.slider.stepSize = item.stepSize.toFloat()
 
-        val initialValue = if (item.value === null)
-            item.defaultValue ?: 0.0 else
-                item.value
+        binding.slider.value = if (item.value === null)
+            (item.defaultValue ?: 0.0).toFloat() else
+            (item.value ?: 0.0).toFloat()
 
-        binding.slider.value = initialValue.toFloat()
-    }
+        sliderTouchListener.initialize(onSliderChange, item)
+        binding.slider.addOnSliderTouchListener(sliderTouchListener)
 
-    private fun bindRangeSlider(item: MoodAttribute) {
-        binding.rangeSlider.visibility = View.VISIBLE
-        binding.slider.visibility = View.GONE
-
-        binding.rangeSlider.valueFrom = item.minValue.toFloat()
-        binding.rangeSlider.valueTo = item.maxValue.toFloat()
-
-        binding.rangeSlider.values = if (item.lowerValue !== null && item.upperValue != null)
-            listOf(item.lowerValue.toFloat(), item.upperValue.toFloat()) else
-                listOf(item.lowerDefaultValue?.toFloat(), item.upperDefaultValue?.toFloat())
-
-    }
-
-    private fun listenToTouch(item: MoodAttribute) {
-        val sliderTouchListener: OnSliderTouchListener = object : OnSliderTouchListener {
-            @SuppressLint("RestrictedApi")
-            override fun onStartTrackingTouch(slider: Slider) {}
-            @SuppressLint("RestrictedApi")
-            override fun onStopTrackingTouch(slider: Slider) {
-                val value = binding.slider.value
-                onSliderChange.invoke(item, value, null, null)
-            }
-        }
-
-        val rangeSliderToucListener: RangeSlider.OnSliderTouchListener =
-            object : RangeSlider.OnSliderTouchListener {
-                @SuppressLint("RestrictedApi")
-                override fun onStartTrackingTouch(slider: RangeSlider) {}
-                @SuppressLint("RestrictedApi")
-                override fun onStopTrackingTouch(slider: RangeSlider) {
-                    val (lowerValue, upperValue) = binding.rangeSlider.values
-                    onSliderChange.invoke(item, null, lowerValue, upperValue)
-                }
-        }
-
-        if (item.canHaveRange) {
-            binding.rangeSlider.addOnSliderTouchListener(rangeSliderToucListener)
-        } else {
-            binding.slider.addOnSliderTouchListener(sliderTouchListener)
-        }
+        binding.lowerSliderValue.text = item.minValue.toString()
+        binding.upperSliderValue.text = item.maxValue.toString()
     }
 }
 
 class MoodAttributeDiffUtil : DiffUtil.ItemCallback<MoodAttribute>() {
     override fun areItemsTheSame(oldItem: MoodAttribute, newItem: MoodAttribute): Boolean =
-        oldItem.id == newItem.id
+        oldItem.name === newItem.name
 
     override fun areContentsTheSame(oldItem: MoodAttribute, newItem: MoodAttribute): Boolean =
         oldItem == newItem
+}
+
+class OnSliderLetGoListener() : OnSliderTouchListener {
+
+    private lateinit var onSliderChange: (MoodAttribute) -> Unit
+    private lateinit var item: MoodAttribute
+    fun initialize(onSliderChange: (moodAttribute: MoodAttribute) -> Unit, item: MoodAttribute) {
+        this.onSliderChange = onSliderChange
+        this.item = item
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onStartTrackingTouch(slider: Slider) {}
+
+    @SuppressLint("RestrictedApi")
+    override fun onStopTrackingTouch(slider: Slider) {
+        val value = slider.value
+        onSliderChange(item.copyNewWithChangedValues(value))
+    }
 }

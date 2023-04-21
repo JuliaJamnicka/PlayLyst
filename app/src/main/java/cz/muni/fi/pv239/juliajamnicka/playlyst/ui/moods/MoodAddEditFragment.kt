@@ -27,16 +27,15 @@ class MoodAddEditFragment : Fragment() {
 
     private val adapter : MoodAttributesAdapter by lazy {
         MoodAttributesAdapter(
-            onItemClick = { _ -> {}
-            },
-            onSliderChange = { moodAttribute, value, lowerValue, upperValue ->
-                saveChangedValues(moodAttribute, value, lowerValue, upperValue)
+            onSliderChange = { changedAttribute ->
+                pickedAttributes[changedAttribute.name] = changedAttribute
+                adapter.submitList(getSortedAttributes())
             }
         )
     }
     private val args: MoodAddEditFragmentArgs by navArgs()
 
-    private val pickedAttributes: MutableList<MoodAttribute> = mutableListOf()
+    private lateinit var pickedAttributes: MutableMap<String, MoodAttribute>;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +43,12 @@ class MoodAddEditFragment : Fragment() {
     ): View {
         binding = FragmentMoodAddEditBinding.inflate(layoutInflater, container, false)
 
-        for (attribute in args.mood?.attributes ?: emptyList()) {
-            pickedAttributes.add(attribute.copy())
-        }
+        val attributes = args.mood?.attributes ?: createDefaultAttributesList()
+        pickedAttributes = attributes
+            .sortedBy { it.name }
+            .associate { Pair(it.name, it.copy()) }
+            .toMutableMap()
+
         return binding.root
     }
 
@@ -78,7 +80,8 @@ class MoodAddEditFragment : Fragment() {
             val name = binding.nameEditText.text.toString()
             val color = "#${binding.colorEditText.text.toString()}"
 
-            moodRepository.saveOrUpdate(name, color, pickedAttributes, args.mood?.id)
+            moodRepository.saveOrUpdate(name, color, getSortedAttributes(),
+                args.mood?.id)
             findNavController().popBackStack()
         }
 
@@ -86,18 +89,16 @@ class MoodAddEditFragment : Fragment() {
 
     private fun setInitialValues() {
         val mood = args.mood
+        adapter.submitList(getSortedAttributes())
 
-        if (mood == null) {
-            adapter.submitList(createDefaultAttributesList())
-        } else {
-            adapter.submitList(mood.attributes)
+        if (mood !== null) {
             binding.colorEditText.setText(mood.color.drop(1))
             binding.colorWheel.imageTintList = ColorStateList.valueOf(Color.parseColor(mood.color))
             binding.nameEditText.setText(mood.name)
         }
     }
 
-    private fun createDefaultAttributesList(): MutableList<MoodAttribute> {
+    private fun createDefaultAttributesList(): List<MoodAttribute> {
         return MoodAttributeType.values().map {
             val thresholds: AttributeThresholds = it.getThresholds()
             MoodAttribute(
@@ -110,23 +111,28 @@ class MoodAddEditFragment : Fragment() {
                 canHaveRange = thresholds.canHaveRange,
                 defaultValue = thresholds.defaultValue,
                 lowerDefaultValue = thresholds.lowerDefaultValue,
-                upperDefaultValue = thresholds.upperDefaultValue
+                upperDefaultValue = thresholds.upperDefaultValue,
+                value = thresholds.defaultValue
             )
-        }.toMutableList()
-    }
-
-    private fun saveChangedValues(moodAttribute: MoodAttribute, value: Float?,
-        lowerValue: Float?, upperValue: Float?) {
-        val changedAttribute =
-            moodAttribute.copyNewWithChangedValues(value, lowerValue, upperValue)
-
-        if (pickedAttributes.find { it.name === changedAttribute.name } === null) {
-            pickedAttributes.add(changedAttribute)
-        } else {
-            pickedAttributes.replaceAll {
-                if (it.name === changedAttribute.name) changedAttribute else it  }
         }
     }
 
+    private fun refreshList() {
+        val before = adapter.itemCount
+        adapter.submitList(getSortedAttributes())
+        val after = adapter.itemCount
+        assert(before == after)
+    }
 
+    private fun getSortedAttributes(): List<MoodAttribute> {
+        return pickedAttributes
+            .values
+            .toList()
+            .sortedBy { it.name }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshList()
+    }
 }

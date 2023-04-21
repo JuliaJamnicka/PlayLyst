@@ -11,10 +11,10 @@ data class AttributeThresholds(
 
 enum class MoodAttributeType {
     DANCEABILITY, ACOUSTICNESS, POPULARITY, MODE, INSTRUMENTALNESS, ENERGY, LIVENESS,
-    LOUDNESS, SPEECHINESS, TEMPO, VALENCE; //KEY
+    LOUDNESS, SPEECHINESS, TEMPO, VALENCE, KEY;
 
     fun getDescription(): String = when (this) {
-        //KEY -> "The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation. Ex: 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1."
+        KEY -> "The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation. Ex: 0 = C, 1 = C♯/D♭, 2 = D, and so on. If no key was detected, the value is -1."
         MODE -> "Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0."
         ACOUSTICNESS -> "A confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic."
         DANCEABILITY -> "Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is the most danceable."
@@ -29,13 +29,13 @@ enum class MoodAttributeType {
     }
 
     fun getThresholds(): AttributeThresholds = when (this) {
-        /*KEY -> AttributeThresholds(
+        KEY -> AttributeThresholds(
             minValue = -1.0,
             maxValue = 11.0,
             stepSize = 1.0,
             canHaveRange = false,
             defaultValue = 5.0
-        )*/
+        )
         MODE -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
@@ -48,6 +48,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -56,6 +57,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -64,6 +66,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -72,6 +75,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -80,6 +84,7 @@ enum class MoodAttributeType {
             maxValue = 0.0,
             stepSize = 5.0,
             canHaveRange = true,
+            defaultValue = 0.0,
             lowerDefaultValue = -60.0,
             upperDefaultValue = 0.0
         )
@@ -88,6 +93,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -96,6 +102,7 @@ enum class MoodAttributeType {
             maxValue = 300.0,
             stepSize = 10.0,
             canHaveRange = true,
+            defaultValue = 100.0,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 300.0
         )
@@ -104,6 +111,7 @@ enum class MoodAttributeType {
             maxValue = 100.0,
             stepSize = 5.0,
             canHaveRange = true,
+            defaultValue = 70.0,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 100.0
         )
@@ -112,6 +120,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
@@ -120,6 +129,7 @@ enum class MoodAttributeType {
             maxValue = 1.0,
             stepSize = 0.05,
             canHaveRange = true,
+            defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
         )
