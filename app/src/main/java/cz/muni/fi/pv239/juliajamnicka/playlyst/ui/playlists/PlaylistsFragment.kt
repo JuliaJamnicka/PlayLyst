@@ -49,8 +49,8 @@ class PlaylistsFragment : Fragment() {
             Playlist(
                 id = "spotify-id",
                 uri = "hello",
-                name = "Modern Violin",
-                imageLink = "",
+                name = "Car radio",
+                imageLink = "https://i.ibb.co/1dcHGDv/car-radio.png",
                 songs = listOf<Song>(Song(id = "id", uri = "", name = "Young and Beautiful",
                 artist = "Lana Del Rey", genre = "Pop", imageLink = ""))
             )
@@ -59,8 +59,8 @@ class PlaylistsFragment : Fragment() {
             Playlist(
                 id = "spotify-id-2",
                 uri = "hello",
-                name = "my life is a movie",
-                imageLink = "",
+                name = "Dancing alone in the kitchen",
+                imageLink = "https://i.ibb.co/wzD3w2w/tumblr-f4bb183a62a9600b538875a58e9a7bcb-ec6afa71-540.jpg",
                 songs = emptyList()
             ),
         )

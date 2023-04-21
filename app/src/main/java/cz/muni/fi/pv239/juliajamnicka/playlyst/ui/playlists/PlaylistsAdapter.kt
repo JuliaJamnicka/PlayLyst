@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemPlaylistBinding
 
@@ -29,7 +31,9 @@ class PlaylistViewHolder(
     private val binding: ItemPlaylistBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Playlist, onItemClick: (Playlist) -> Unit) {
-        // binding.playlistCover
+        binding.playlistCover.load(item.imageLink) {
+            error(R.drawable.blank_song_cover)
+        }
         binding.playlistName.text = item.name
 
         binding.root.setOnClickListener {
