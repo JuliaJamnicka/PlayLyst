@@ -3,8 +3,6 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -128,10 +126,7 @@ class MoodAddEditFragment : Fragment() {
     }
 
     private fun refreshList() {
-        val before = adapter.itemCount
         adapter.submitList(getSortedAttributes())
-        val after = adapter.itemCount
-        assert(before == after)
     }
 
     private fun getSortedAttributes(): List<MoodAttribute> {
