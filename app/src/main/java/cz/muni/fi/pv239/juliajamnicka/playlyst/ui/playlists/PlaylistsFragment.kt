@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
-import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistsBinding
@@ -36,10 +34,6 @@ class PlaylistsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
-
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.supportActionBar?.show()
-        mainActivity.title = mainActivity.getString(R.string.playlists_title)
 
         playlistRepository.deletePlaylists()
         playlistRepository.deleteSongs()

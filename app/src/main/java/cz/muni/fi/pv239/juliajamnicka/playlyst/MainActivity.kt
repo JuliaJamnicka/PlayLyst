@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ActivityMainBinding
 
@@ -19,17 +20,31 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appbar)
 
+        // this worked before i added the appbarconfig, now the back buttons' black AGAIN
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_appbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.show()
+
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         val navGraph = navController.graph
 
-        if (true) { // check if authorization code present
+        val appBarConfig = AppBarConfiguration(
+            setOf(
+                R.id.playlistsFragment,
+                R.id.moodsFragment
+            )
+        )
+        binding.appbar.setupWithNavController(navController, appBarConfig)
+        binding.bottomNavigation.setupWithNavController(navController)
+
+        if (false) { // check if authorization code present
+            // aaand this is ignored, great
             navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
         } else { // check validity of access token in the background, refresh it if necessary
             navGraph.setStartDestination(R.id.playlistsFragment)
         }
-
-        binding.bottomNavigation.setupWithNavController(navController)
     }
 
     fun setBottomNavigationVisibility(visibility: Int) {

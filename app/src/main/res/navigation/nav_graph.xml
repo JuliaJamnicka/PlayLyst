@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/spotifyAuthorizationFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.authentication.SpotifyAuthorizationFragment"
-        android:label="fragment_spotify_authorization"
+        android:label="Log in with Spotify"
         tools:layout="@layout/fragment_spotify_authorization" >
         <action
             android:id="@+id/action_spotifyAuthorizationFragment_to_playlistsFragment"
@@ -16,7 +16,6 @@
     <fragment
         android:id="@+id/songsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsFragment"
-        android:label="fragment_songs"
         tools:layout="@layout/fragment_songs" >
         <argument
             android:name="playlist"
@@ -27,7 +26,7 @@
     <fragment
         android:id="@+id/playlistsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.PlaylistsFragment"
-        android:label="fragment_playlists"
+        android:label="Playlists"
         tools:layout="@layout/fragment_playlists" >
         <action
             android:id="@+id/action_playlistsFragment_to_songsFragment"
@@ -36,7 +35,7 @@
     <fragment
         android:id="@+id/moodsFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods.MoodsFragment"
-        android:label="fragment_moods"
+        android:label="Moods"
         tools:layout="@layout/fragment_moods" >
         <action
             android:id="@+id/action_moodsFragment_to_moodAddEditFragment"
@@ -44,8 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/moodAddEditFragment"
-        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods.MoodAddEditFragment"
-        android:label="MoodAddEditFragment" >
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods.MoodAddEditFragment" >
         <argument
             android:name="mood"
             app:argType="cz.muni.fi.pv239.juliajamnicka.playlyst.data.Mood"

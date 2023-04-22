@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
+import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodAddEditBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
@@ -35,13 +37,15 @@ class MoodAddEditFragment : Fragment() {
     }
     private val args: MoodAddEditFragmentArgs by navArgs()
 
-    private lateinit var pickedAttributes: MutableMap<String, MoodAttribute>;
+    private lateinit var pickedAttributes: MutableMap<String, MoodAttribute>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoodAddEditBinding.inflate(layoutInflater, container, false)
+
+        setUpAppBar()
 
         val attributes = args.mood?.attributes ?: createDefaultAttributesList()
         pickedAttributes = attributes
@@ -85,6 +89,12 @@ class MoodAddEditFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+    }
+
+    private fun setUpAppBar() {
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.title = mainActivity.getString(if (args.mood !== null)
+            R.string.edit_mood_title else R.string.create_mood_title)
     }
 
     private fun setInitialValues() {

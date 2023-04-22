@@ -130,4 +130,11 @@ class SpotifyAuthorizationFragment : Fragment() {
                 }
             })
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.supportActionBar?.show()
+    }
 }

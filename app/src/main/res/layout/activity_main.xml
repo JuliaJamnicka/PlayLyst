@@ -8,6 +8,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:minHeight="100dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:titleTextColor="@color/purple_500"
         app:titleTextAppearance="@style/BoldTextAppearance"

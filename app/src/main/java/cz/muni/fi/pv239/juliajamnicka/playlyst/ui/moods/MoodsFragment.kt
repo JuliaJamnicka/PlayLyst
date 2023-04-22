@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
-import cz.muni.fi.pv239.juliajamnicka.playlyst.R
+
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentMoodsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.MoodRepository
 
@@ -27,20 +26,11 @@ class MoodsFragment : Fragment() {
         )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMoodsBinding.inflate(layoutInflater, container, false)
-
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.supportActionBar?.show()
-        mainActivity.title = mainActivity.getString(R.string.moods_title)
-
         return binding.root
     }
 
@@ -55,7 +45,6 @@ class MoodsFragment : Fragment() {
                 .navigate(MoodsFragmentDirections
                     .actionMoodsFragmentToMoodAddEditFragment())
         }
-
     }
 
     private fun refreshList() {

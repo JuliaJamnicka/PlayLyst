@@ -1,6 +1,6 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist
 
-import android.content.res.ColorStateList
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -77,6 +77,8 @@ class SongsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.supportActionBar?.show()
     }
 
 }
