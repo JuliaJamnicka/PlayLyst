@@ -1,10 +1,13 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowCompat
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -32,6 +35,8 @@ class SongsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+
     }
 
     override fun onCreateView(
@@ -41,8 +46,7 @@ class SongsFragment : Fragment() {
         binding = FragmentSongsBinding.inflate(layoutInflater, container, false)
 
         val mainActivity = requireActivity() as MainActivity
-        mainActivity.supportActionBar?.show()
-        mainActivity.title = ""
+        mainActivity.supportActionBar?.hide()
 
         return binding.root
     }
@@ -52,6 +56,11 @@ class SongsFragment : Fragment() {
 
         binding.playlistCover.load(args.playlist?.imageLink) {
             error(R.drawable.blank_song_cover)
+        }
+        binding.playlistName.text = args.playlist?.name
+
+        binding.backButton.setOnClickListener {
+            findNavController().navigateUp()
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -63,6 +72,11 @@ class SongsFragment : Fragment() {
 
     private fun refreshList() {
         adapter.submitList(args.playlist?.songs)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
     }
 
 }
