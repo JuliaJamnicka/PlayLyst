@@ -25,6 +25,7 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_playlist_song" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
