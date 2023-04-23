@@ -50,4 +50,9 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <fragment
+        android:id="@+id/playlistCreateFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create.PlaylistCreateFragment"
+        android:label="Create playlist"
+        tools:layout="@layout/fragment_playlist_create" />
 </navigation>

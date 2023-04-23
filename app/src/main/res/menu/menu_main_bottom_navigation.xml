@@ -5,7 +5,7 @@
         android:icon="@drawable/playlists_icon_selector"
         android:title="@string/bottom_nav_playlists_title" />
     <item
-        android:id="@+id/createPlaylistFragment"
+        android:id="@+id/playlistCreateFragment"
         android:icon="@drawable/plus_icon_selector"
         android:title="@string/bottom_nav_create_new_title" />
     <item
