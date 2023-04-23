@@ -20,4 +20,5 @@
     <string name="create_playlist_choose_songs">Choose up to 3 songs to seed the playlist</string>
     <string name="create_playlist_chosen_songs">Starter songs</string>
     <string name="create_playlist_include_songs">Include starter songs</string>
+    <string name="create_playlist_save_button">Generate playlist</string>
 </resources>
