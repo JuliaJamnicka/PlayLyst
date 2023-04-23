@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SearchRepository
 
 
@@ -45,6 +46,10 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private val searchRepository: SearchRepository = SearchRepository()
+    private val playlistRepository: PlaylistRepository by lazy {
+        PlaylistRepository(requireContext())
+    }
+
     private var chosenSongs: MutableList<Song> = mutableListOf()
 
     override fun onCreateView(
@@ -103,6 +108,11 @@ class PlaylistCreateFragment : Fragment() {
                 return false
             }
         })
+
+        binding.saveButton.setOnClickListener {
+            playlistRepository.save("New playlist", chosenSongs,
+                imageLink = chosenSongs[0].imageLink)
+        }
     }
 
     private fun sendTokenToRepo() {

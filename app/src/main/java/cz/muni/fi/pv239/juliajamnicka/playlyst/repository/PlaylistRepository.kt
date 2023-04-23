@@ -3,6 +3,7 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.repository
 import android.content.Context
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.PlaylistAndSong
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlayLystDatabase
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistDao
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toAppData
@@ -14,17 +15,29 @@ class PlaylistRepository(
 ) {
 
     fun saveOrUpdate(playlist: Playlist) {
-        dao.insertPlaylist(playlist.toEntity())
+        val playlistId = dao.insertPlaylist(playlist.toEntity())
 
         for (song in playlist.songs) {
-            dao.insertSong(song.toEntity())
+            val songId = dao.insertSong(song.toEntity())
 
             val playlistAndSong = PlaylistAndSong(
-                playlistId = playlist.id,
-                songId = song.id
+                playlistId = playlistId,
+                songId = songId
             )
             dao.insert(playlistAndSong.toEntity())
         }
+    }
+
+    fun save(name: String, songs: List<Song>, id: Long = 0, imageLink: String? = null) {
+        val playlist = Playlist(
+            id = id,
+            spotifyId = "",
+            uri = "",
+            name = name,
+            imageLink = imageLink,
+            songs = songs
+        )
+        saveOrUpdate(playlist)
     }
 
     fun getAllPlaylists(): List<Playlist> =

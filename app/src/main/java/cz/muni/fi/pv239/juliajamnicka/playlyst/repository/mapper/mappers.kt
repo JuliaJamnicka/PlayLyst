@@ -6,6 +6,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.database.*
 fun PlaylistWithSongs.toAppData(): Playlist =
     Playlist(
         id = playlist.playlistId,
+        spotifyId = playlist.spotifyId,
         uri = playlist.uri,
         name = playlist.name,
         imageLink = playlist.imageLink,
@@ -15,6 +16,7 @@ fun PlaylistWithSongs.toAppData(): Playlist =
 fun Playlist.toEntity(): PlaylistEntity =
     PlaylistEntity(
         playlistId = id,
+        spotifyId = spotifyId,
         uri = uri,
         name = name,
         imageLink = imageLink
@@ -23,6 +25,7 @@ fun Playlist.toEntity(): PlaylistEntity =
 fun SongEntity.toAppData() : Song =
     Song(
         id = songId,
+        spotifyId = spotifyId,
         uri = uri,
         name = name,
         artist = artist,
@@ -33,6 +36,7 @@ fun SongEntity.toAppData() : Song =
 fun Song.toEntity() : SongEntity =
     SongEntity(
         songId = id,
+        spotifyId = spotifyId,
         uri = uri,
         name = name,
         artist = artist,

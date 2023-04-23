@@ -49,7 +49,8 @@ class SearchRepository(
     private fun mapResponse(response: SearchResponse): List<Song> {
         return response.tracks.items.map {
             Song(
-                id = it.id,
+                id = 0,
+                spotifyId = it.id,
                 uri = it.uri,
                 name = it.name,
                 artist = it.artists.map { it.name }.joinToString(", "),
