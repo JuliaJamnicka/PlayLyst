@@ -38,5 +38,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_playlist_song" />
 
+    <TextView
+        android:id="@+id/include_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/create_playlist_include_songs"
+        android:textAppearance="@style/CircularTextAppearance"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/chosen_recycler_view"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/include_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@id/chosen_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

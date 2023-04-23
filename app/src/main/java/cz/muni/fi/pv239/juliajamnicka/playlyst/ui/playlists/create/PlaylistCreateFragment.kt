@@ -45,7 +45,6 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private val searchRepository: SearchRepository = SearchRepository()
-
     private var chosenSongs: MutableList<Song> = mutableListOf()
 
     override fun onCreateView(
@@ -67,9 +66,14 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.visibility = View.VISIBLE
 
         sendTokenToRepo()
+        showIncludeSwitch(false)
 
         binding.search.setOnCloseListener {
             binding.chosenRecyclerView.visibility = View.VISIBLE
+
+            if (chosenSongs.isNotEmpty()) {
+                showIncludeSwitch(true)
+            }
             false
         }
 
@@ -77,12 +81,14 @@ class PlaylistCreateFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.VISIBLE
+                showIncludeSwitch(chosenSongs.isNotEmpty())
                 searchAdapter.submitList(emptyList())
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.GONE
+                showIncludeSwitch(false)
 
                 searchRepository.getSearchResults(query,
                     success = { songs ->
@@ -114,6 +120,12 @@ class PlaylistCreateFragment : Fragment() {
     private fun refreshChosen() {
         chosenAdapter.submitList(chosenSongs)
         chosenAdapter.notifyDataSetChanged()
+    }
+
+    private fun showIncludeSwitch(show: Boolean) {
+        val visibility = if (show) View.VISIBLE else View.GONE
+        binding.includeTitle.visibility = visibility
+        binding.includeSwitch.visibility = visibility
     }
 
     override fun onResume() {
