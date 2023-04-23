@@ -18,4 +18,5 @@
     <string name="edit_mood_title">Edit mood</string>
 
     <string name="create_playlist_choose_songs">Choose up to 3 songs to seed the playlist</string>
+    <string name="create_playlist_chosen_songs">Chosen songs</string>
 </resources>

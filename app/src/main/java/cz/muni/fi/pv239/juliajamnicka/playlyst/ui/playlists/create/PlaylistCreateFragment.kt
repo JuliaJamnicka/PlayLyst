@@ -2,6 +2,7 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +18,35 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SearchRepository
 class PlaylistCreateFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistCreateBinding
 
-    private val adapter: SearchSongsAdapter by lazy {
+    private val searchAdapter: SearchSongsAdapter by lazy {
         SearchSongsAdapter(
-            onItemClick = {}
+            onAddItemClick = { song ->
+                if (!chosenSongs.contains(song)) {
+                    chosenSongs.add(song)
+                    Log.e(song.name, "was chosen")
+                    refreshChosen()
+                }
+            },
+            onRemoveItemClick = { song ->
+                chosenSongs.remove(song)
+                refreshChosen()
+            }
+        )
+    }
+
+    private val chosenAdapter: ChosenSongsAdapter by lazy {
+        ChosenSongsAdapter(
+            onItemClick = { song ->
+                chosenSongs.remove(song)
+                Log.e(song.name, "was deleted")
+                refreshChosen()
+            }
         )
     }
 
     private val searchRepository: SearchRepository = SearchRepository()
+
+    private var chosenSongs: MutableList<Song> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,20 +59,35 @@ class PlaylistCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = adapter
+        binding.searchRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.searchRecyclerView.adapter = searchAdapter
+
+        binding.chosenRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.chosenRecyclerView.adapter = chosenAdapter
+        binding.chosenRecyclerView.visibility = View.VISIBLE
 
         sendTokenToRepo()
+
+        binding.search.setOnCloseListener {
+            binding.chosenRecyclerView.visibility = View.VISIBLE
+            false
+        }
 
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
+                binding.chosenRecyclerView.visibility = View.VISIBLE
+                searchAdapter.submitList(emptyList())
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
+                binding.chosenRecyclerView.visibility = View.GONE
+
                 searchRepository.getSearchResults(query,
-                    success = { songs -> adapter.submitList(songs)
+                    success = { songs ->
+                        searchAdapter.submitList(songs)
+                        chosenAdapter.submitList(chosenSongs)
                     },
                     fail = {
                         Toast.makeText(context,
@@ -59,8 +97,6 @@ class PlaylistCreateFragment : Fragment() {
                 return false
             }
         })
-
-
     }
 
     private fun sendTokenToRepo() {
@@ -70,8 +106,19 @@ class PlaylistCreateFragment : Fragment() {
         searchRepository.updateAccessToken(token)
     }
 
-    private fun refreshList() {
-        adapter.submitList(emptyList())
+    private fun refreshSearch() {
+        searchAdapter.submitList(emptyList())
+        searchAdapter.notifyDataSetChanged()
+    }
+
+    private fun refreshChosen() {
+        chosenAdapter.submitList(chosenSongs)
+        chosenAdapter.notifyDataSetChanged()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshSearch()
     }
 
 

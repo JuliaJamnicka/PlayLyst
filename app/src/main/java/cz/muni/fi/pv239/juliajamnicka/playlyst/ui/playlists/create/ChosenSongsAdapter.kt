@@ -11,50 +11,45 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemPlaylistSongBinding
 
-class SearchSongsAdapter(
-    private val onAddItemClick: (Song) -> Unit,
-    private val onRemoveItemClick: (Song) -> Unit,
-) : ListAdapter<Song, SearchSongViewHolder>(SearchSongDiffUtil()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchSongViewHolder =
-        SearchSongViewHolder(
+class ChosenSongsAdapter(
+    private val onItemClick: (Song) -> Unit,
+) : ListAdapter<Song, ChosenSongViewHolder>(ChosenSongDiffUtil()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChosenSongViewHolder =
+        ChosenSongViewHolder(
             ItemPlaylistSongBinding
                 .inflate(LayoutInflater.from(parent.context), parent, false)
         )
 
-    override fun onBindViewHolder(holder: SearchSongViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChosenSongViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onAddItemClick, onRemoveItemClick)
+        holder.bind(item, onItemClick)
     }
+
 }
 
 
-class SearchSongViewHolder(
+class ChosenSongViewHolder(
     private val binding: ItemPlaylistSongBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Song, onAddItemClick: (Song) -> Unit, onRemoveItemClick: (Song) -> Unit) {
+    fun bind(item: Song, onItemClick: (Song) -> Unit) {
         binding.songCover.load(item.imageLink) {
             error(R.drawable.blank_song_cover)
         }
         binding.songName.text = item.name
         binding.songArtist.text = item.artist
 
-        binding.addButton.isSelected = false
+        binding.addButton.setImageResource(R.drawable.ic_remove)
+        binding.addButton.isSelected = true
         binding.addButton.visibility = View.VISIBLE
 
-        binding.root.setOnClickListener {
-            if (!binding.addButton.isSelected) {
-                onAddItemClick(item)
-                binding.addButton.isSelected = true
-            } else {
-                onRemoveItemClick(item)
-                binding.addButton.isSelected = false
-            }
+        binding.addButton.setOnClickListener {
+            onItemClick(item)
         }
     }
 }
 
 
-class SearchSongDiffUtil : DiffUtil.ItemCallback<Song>() {
+class ChosenSongDiffUtil : DiffUtil.ItemCallback<Song>() {
     override fun areItemsTheSame(oldItem: Song, newItem: Song): Boolean =
         oldItem.id == newItem.id
 
