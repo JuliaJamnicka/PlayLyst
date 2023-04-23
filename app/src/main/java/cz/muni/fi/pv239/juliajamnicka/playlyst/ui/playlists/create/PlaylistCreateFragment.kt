@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
-import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SearchRepository
+import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 
 
 class PlaylistCreateFragment : Fragment() {
@@ -45,7 +45,7 @@ class PlaylistCreateFragment : Fragment() {
         )
     }
 
-    private val searchRepository: SearchRepository = SearchRepository()
+    private val spotifyRepository: SpotifyRepository = SpotifyRepository()
     private val playlistRepository: PlaylistRepository by lazy {
         PlaylistRepository(requireContext())
     }
@@ -95,7 +95,7 @@ class PlaylistCreateFragment : Fragment() {
                 binding.chosenRecyclerView.visibility = View.GONE
                 showIncludeSwitch(false)
 
-                searchRepository.getSearchResults(query,
+                spotifyRepository.getSearchResults(query,
                     success = { songs ->
                         searchAdapter.submitList(songs)
                         chosenAdapter.submitList(chosenSongs)
@@ -109,6 +109,8 @@ class PlaylistCreateFragment : Fragment() {
             }
         })
 
+
+
         binding.saveButton.setOnClickListener {
             playlistRepository.save("New playlist", chosenSongs,
                 imageLink = chosenSongs[0].imageLink)
@@ -119,7 +121,7 @@ class PlaylistCreateFragment : Fragment() {
         val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
         val token = preferences.getString("token", null) ?: ""
 
-        searchRepository.updateAccessToken(token)
+        spotifyRepository.updateAccessToken(token)
     }
 
     private fun refreshSearch() {

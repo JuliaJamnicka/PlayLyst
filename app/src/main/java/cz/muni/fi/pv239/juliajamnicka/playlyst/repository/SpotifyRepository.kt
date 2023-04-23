@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SearchRepository(
+class SpotifyRepository(
     private val spotifyWebApiService: SpotifyWebApiService = RetrofitUtil.createSpotifyWebApiService()
 ) {
     private lateinit var accessToken: String
@@ -26,7 +26,7 @@ class SearchRepository(
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 val responseBody = response.body()
                 if (response.isSuccessful && responseBody != null) {
-                    val searchSongs = mapResponse(responseBody)
+                    val searchSongs = mapSearchResponse(responseBody)
                     success(searchSongs)
                 } else {
                     Log.e(this::class.simpleName, "body was null")
@@ -46,7 +46,7 @@ class SearchRepository(
         accessToken = token
     }
 
-    private fun mapResponse(response: SearchResponse): List<Song> {
+    private fun mapSearchResponse(response: SearchResponse): List<Song> {
         return response.tracks.items.map {
             Song(
                 id = 0,
@@ -58,5 +58,9 @@ class SearchRepository(
                 imageLink = it.album.images[0].url
             )
         }
+    }
+
+    fun getGenreSeeds() {
+
     }
 }
