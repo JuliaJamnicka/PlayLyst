@@ -29,7 +29,7 @@ interface SpotifyWebApiService {
         @Query("offset") offset: Int?,
     ): Call<SearchResponse>
 
-    @GET("/recommendations/available-genre-seeds")
+    @GET("/v1/recommendations/available-genre-seeds")
     fun getGenreSeeds(
         @Header("Authorization") token: String,
     ): Call<GenreSeedResponse>

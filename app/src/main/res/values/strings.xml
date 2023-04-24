@@ -17,8 +17,9 @@
     <string name="edit_playlist_title">Edit playlist</string>
     <string name="edit_mood_title">Edit mood</string>
 
-    <string name="create_playlist_choose_songs">Choose up to 3 songs to seed the playlist</string>
+    <string name="create_playlist_choose_songs">Choose seeder songs</string>
     <string name="create_playlist_chosen_songs">Starter songs</string>
-    <string name="create_playlist_include_songs">Include starter songs</string>
+    <string name="create_playlist_include_songs">Include seeder songs in the playlist</string>
     <string name="create_playlist_save_button">Generate playlist</string>
+    <string name="create_playlist_choose_tags">Choose genres to include</string>
 </resources>

@@ -1,6 +1,8 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.app.ActionBar.LayoutParams
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,7 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
+import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
+import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
@@ -57,6 +64,10 @@ class PlaylistCreateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistCreateBinding.inflate(layoutInflater, container, false)
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.GONE)
+
         return binding.root
     }
 
@@ -75,6 +86,7 @@ class PlaylistCreateFragment : Fragment() {
 
         binding.search.setOnCloseListener {
             binding.chosenRecyclerView.visibility = View.VISIBLE
+            binding.saveButton.visibility = View.VISIBLE
 
             if (chosenSongs.isNotEmpty()) {
                 showIncludeSwitch(true)
@@ -86,6 +98,7 @@ class PlaylistCreateFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.VISIBLE
+                binding.saveButton.visibility = View.VISIBLE
                 showIncludeSwitch(chosenSongs.isNotEmpty())
                 searchAdapter.submitList(emptyList())
                 return false
@@ -94,6 +107,7 @@ class PlaylistCreateFragment : Fragment() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.GONE
                 showIncludeSwitch(false)
+                binding.saveButton.visibility = View.GONE
 
                 spotifyRepository.getSearchResults(query,
                     success = { songs ->
@@ -109,11 +123,33 @@ class PlaylistCreateFragment : Fragment() {
             }
         })
 
-
+        val genres = spotifyRepository.getGenreSeeds(
+            success = { genres -> showGenres(genres) },
+            fail = {
+                Toast.makeText(context,
+                    "Error getting genres list", Toast.LENGTH_SHORT).show()
+            }
+        )
 
         binding.saveButton.setOnClickListener {
             playlistRepository.save("New playlist", chosenSongs,
                 imageLink = chosenSongs[0].imageLink)
+            findNavController().navigate(PlaylistCreateFragmentDirections.actionPlaylistCreateFragmentToPlaylistsFragment())
+        }
+    }
+
+    private fun showGenres(genres: List<String>) {
+        for (genre in genres) {
+            val genreChip = Chip(requireContext()).apply {
+                id = ViewCompat.generateViewId()
+                width = LayoutParams.WRAP_CONTENT
+                text = genre
+                chipBackgroundColor = ColorStateList.valueOf(resources.getColor(R.color.purple_500))
+                setTextAppearance(R.style.chipTextAppearance)
+                isClickable = true
+                isCheckable = true
+            }
+            binding.genresChipGroup.addView(genreChip)
         }
     }
 
@@ -138,11 +174,20 @@ class PlaylistCreateFragment : Fragment() {
         val visibility = if (show) View.VISIBLE else View.GONE
         binding.includeTitle.visibility = visibility
         binding.includeSwitch.visibility = visibility
+
+        binding.genresTitle.visibility = visibility
+        binding.genresScroll.visibility = visibility
     }
 
     override fun onResume() {
         super.onResume()
         refreshSearch()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.VISIBLE)
     }
 
 

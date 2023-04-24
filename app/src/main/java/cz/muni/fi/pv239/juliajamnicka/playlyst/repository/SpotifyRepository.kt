@@ -2,6 +2,7 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.repository
 
 import android.util.Log
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.GenreSeedResponse
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.SearchResponse
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.services.SpotifyWebApiService
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
@@ -20,7 +21,7 @@ class SpotifyRepository(
             query = query,
             type = listOf("track"),
             market = null,
-            limit = 7,
+            limit = 15,
             offset = 0
         ).enqueue(object : Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
@@ -60,7 +61,25 @@ class SpotifyRepository(
         }
     }
 
-    fun getGenreSeeds() {
+    fun getGenreSeeds(success: (List<String>) -> Unit, fail: () -> Unit) {
+        spotifyWebApiService.getGenreSeeds(
+            token = "Bearer $accessToken"
+        ).enqueue(object : Callback<GenreSeedResponse> {
+            override fun onResponse(call: Call<GenreSeedResponse>, response: Response<GenreSeedResponse>) {
+                val responseBody = response.body()
+                if (response.isSuccessful && responseBody != null) {
+                    success(responseBody.genres)
+                } else {
+                    Log.e(this::class.simpleName, "body was null")
+                    fail()
+                }
+            }
 
+            override fun onFailure(call: Call<GenreSeedResponse>, t: Throwable) {
+                Log.e(this::class.simpleName, t.message, t)
+                fail()
+            }
+        })
     }
+
 }
