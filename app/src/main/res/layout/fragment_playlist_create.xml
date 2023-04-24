@@ -94,11 +94,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="50dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/genres_title"
-        app:layout_constraintBottom_toTopOf="@id/save_button">
+        app:layout_constraintTop_toBottomOf="@id/genres_title">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/genres_chip_group"

@@ -58,7 +58,7 @@ class SpotifyAuthorizationFragment : Fragment() {
                     apply()
                     // surely not like this, expires_in also needs to be saved and checked
                     // but that's a problem for future me
-                    Toast.makeText(context, accessTokenResponse.access_token, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Access token received", Toast.LENGTH_SHORT).show()
                 }
             }, fail = {
                 Toast.makeText(context, "Access token error", Toast.LENGTH_SHORT).show()

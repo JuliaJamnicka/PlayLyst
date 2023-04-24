@@ -98,11 +98,7 @@ class PlaylistCreateFragment : Fragment() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                binding.chosenRecyclerView.visibility = View.VISIBLE
-                binding.searchDoneButton.visibility = View.GONE
-                binding.saveButton.visibility = View.VISIBLE
-                showIncludeSwitch(chosenSongs.isNotEmpty())
-                searchAdapter.submitList(emptyList())
+                hideSearch()
                 return false
             }
 
@@ -127,11 +123,7 @@ class PlaylistCreateFragment : Fragment() {
         })
 
         binding.searchDoneButton.setOnClickListener {
-            binding.chosenRecyclerView.visibility = View.VISIBLE
-            binding.searchDoneButton.visibility = View.GONE
-            binding.saveButton.visibility = View.VISIBLE
-            showIncludeSwitch(chosenSongs.isNotEmpty())
-            searchAdapter.submitList(emptyList())
+            hideSearch()
         }
 
         spotifyRepository.getGenreSeeds(
@@ -147,6 +139,14 @@ class PlaylistCreateFragment : Fragment() {
                 imageLink = chosenSongs[0].imageLink)
             findNavController().navigate(PlaylistCreateFragmentDirections.actionPlaylistCreateFragmentToPlaylistsFragment())
         }
+    }
+
+    private fun hideSearch() {
+        binding.chosenRecyclerView.visibility = View.VISIBLE
+        binding.searchDoneButton.visibility = View.GONE
+        binding.saveButton.visibility = View.VISIBLE
+        showIncludeSwitch(chosenSongs.isNotEmpty())
+        searchAdapter.submitList(emptyList())
     }
 
     private fun showGenres(genres: List<String>) {
