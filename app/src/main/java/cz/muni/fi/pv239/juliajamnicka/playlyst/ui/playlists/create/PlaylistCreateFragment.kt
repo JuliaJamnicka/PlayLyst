@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -98,6 +99,7 @@ class PlaylistCreateFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.VISIBLE
+                binding.searchDoneButton.visibility = View.GONE
                 binding.saveButton.visibility = View.VISIBLE
                 showIncludeSwitch(chosenSongs.isNotEmpty())
                 searchAdapter.submitList(emptyList())
@@ -108,6 +110,7 @@ class PlaylistCreateFragment : Fragment() {
                 binding.chosenRecyclerView.visibility = View.GONE
                 showIncludeSwitch(false)
                 binding.saveButton.visibility = View.GONE
+                binding.searchDoneButton.visibility = View.VISIBLE
 
                 spotifyRepository.getSearchResults(query,
                     success = { songs ->
@@ -123,7 +126,15 @@ class PlaylistCreateFragment : Fragment() {
             }
         })
 
-        val genres = spotifyRepository.getGenreSeeds(
+        binding.searchDoneButton.setOnClickListener {
+            binding.chosenRecyclerView.visibility = View.VISIBLE
+            binding.searchDoneButton.visibility = View.GONE
+            binding.saveButton.visibility = View.VISIBLE
+            showIncludeSwitch(chosenSongs.isNotEmpty())
+            searchAdapter.submitList(emptyList())
+        }
+
+        spotifyRepository.getGenreSeeds(
             success = { genres -> showGenres(genres) },
             fail = {
                 Toast.makeText(context,
@@ -148,9 +159,19 @@ class PlaylistCreateFragment : Fragment() {
                 setTextAppearance(R.style.chipTextAppearance)
                 isClickable = true
                 isCheckable = true
+                setOnCheckedChangeListener { _, _ -> sortGenres() }
             }
             binding.genresChipGroup.addView(genreChip)
         }
+    }
+
+    private fun sortGenres() {
+        val genres = binding.genresChipGroup.children.sortedBy { !(it as Chip).isChecked }
+
+       for (genre in genres) {
+           binding.genresChipGroup.removeView(genre)
+           binding.genresChipGroup.addView(genre)
+       }
     }
 
     private fun sendTokenToRepo() {
@@ -189,6 +210,4 @@ class PlaylistCreateFragment : Fragment() {
         val mainActivity = requireActivity() as MainActivity
         mainActivity.setBottomNavigationVisibility(View.VISIBLE)
     }
-
-
 }
