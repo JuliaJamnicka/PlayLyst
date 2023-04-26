@@ -137,7 +137,7 @@ class PlaylistCreateFragment : Fragment() {
         binding.saveButton.setOnClickListener {
             playlistRepository.save("New playlist", chosenSongs,
                 imageLink = chosenSongs[0].imageLink)
-            findNavController().navigate(PlaylistCreateFragmentDirections.actionPlaylistCreateFragmentToPlaylistsFragment())
+            findNavController().navigateUp()
         }
     }
 
