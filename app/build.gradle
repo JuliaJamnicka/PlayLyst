@@ -46,6 +46,7 @@ dependencies {
 
     //SPLASH SCREEN
     implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
 
     // NAVIGATION
     def nav_version = "2.5.3"
