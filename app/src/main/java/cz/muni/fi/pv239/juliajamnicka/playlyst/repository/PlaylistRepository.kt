@@ -4,6 +4,7 @@ import android.content.Context
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.PlaylistAndSong
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.SongAndArtist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlayLystDatabase
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistDao
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toAppData
@@ -25,6 +26,16 @@ class PlaylistRepository(
                 songId = songId
             )
             dao.insert(playlistAndSong.toEntity())
+
+            for (artist in song.artists) {
+                val artistId = dao.insert(artist.toEntity())
+
+                val songAndArtist = SongAndArtist(
+                    songId = songId,
+                    artistId = artistId
+                )
+                dao.insert(songAndArtist.toEntity())
+            }
         }
     }
 

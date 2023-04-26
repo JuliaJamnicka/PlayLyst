@@ -5,6 +5,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.GenreSeedResponse
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.SearchResponse
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.services.SpotifyWebApiService
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Artist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,9 +55,17 @@ class SpotifyRepository(
                 spotifyId = it.id,
                 uri = it.uri,
                 name = it.name,
-                artist = it.artists.map { it.name }.joinToString(", "),
                 genre = "", //change this laterrr
-                imageLink = it.album.images[0].url
+                imageLink = it.album.images[0].url,
+                artists = it.artists.map {
+                    Artist(
+                        id = 0,
+                        spotifyId = it.id,
+                        name = it.name,
+                        uri = it.uri,
+                        imageLink = null
+                    )
+                }
             )
         }
     }

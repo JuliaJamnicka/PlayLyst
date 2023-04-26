@@ -34,8 +34,7 @@ class SongViewHolder(
             error(R.drawable.blank_song_cover)
         }
         binding.songName.text = item.name
-        binding.songArtist.text = item.artist
-        //binding.genreChip.text = item.genre
+        binding.songArtist.text = item.getArtistNames()
 
         binding.root.setOnClickListener {
             onItemClick(item)

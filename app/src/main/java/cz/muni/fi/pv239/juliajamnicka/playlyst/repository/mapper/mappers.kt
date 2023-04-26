@@ -22,15 +22,15 @@ fun Playlist.toEntity(): PlaylistEntity =
         imageLink = imageLink
     )
 
-fun SongEntity.toAppData() : Song =
+fun SongWithArtists.toAppData() : Song =
     Song(
-        id = songId,
-        spotifyId = spotifyId,
-        uri = uri,
-        name = name,
-        artist = artist,
-        genre = genre,
-        imageLink = imageLink
+        id = song.songId,
+        spotifyId = song.spotifyId,
+        uri = song.uri,
+        name = song.name,
+        genre = song.genre,
+        imageLink = song.imageLink,
+        artists = artists.map { it.toAppData() }
     )
 
 fun Song.toEntity() : SongEntity =
@@ -39,22 +39,44 @@ fun Song.toEntity() : SongEntity =
         spotifyId = spotifyId,
         uri = uri,
         name = name,
-        artist = artist,
         genre = genre,
         imageLink = imageLink
     )
 
-fun PlaylistAndSong.toEntity(): PLaylistAndSongEntity =
-    PLaylistAndSongEntity(
+fun PlaylistAndSong.toEntity(): PlaylistAndSongEntity =
+    PlaylistAndSongEntity(
         playlistId = playlistId,
         songId = songId
     )
 
-// i dont think im gonna need this everrr
-fun PLaylistAndSongEntity.ToAppData(): PlaylistAndSong =
+
+fun PlaylistAndSongEntity.ToAppData(): PlaylistAndSong =
     PlaylistAndSong(
         playlistId = playlistId,
         songId = songId
+    )
+
+
+fun Artist.toEntity(): ArtistEntity =
+    ArtistEntity(
+        artistId = id,
+        spotifyId, name, uri, imageLink
+    )
+
+fun ArtistEntity.toAppData() =
+    Artist(
+        id = artistId,
+        spotifyid, name, uri, imageLink
+    )
+
+fun SongAndArtist.toEntity() =
+    SongAndArtistEntity(
+        songId, artistId
+    )
+
+fun SongAndArtistEntity.toAppData() =
+    SongAndArtist(
+        songId, artistId
     )
 
 fun MoodWithAttributes.toAppData(): Mood =

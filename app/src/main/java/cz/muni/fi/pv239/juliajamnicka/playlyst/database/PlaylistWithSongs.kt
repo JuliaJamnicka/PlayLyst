@@ -9,9 +9,10 @@ data class PlaylistWithSongs(
     @Embedded val playlist: PlaylistEntity,
 
     @Relation(
+        entity = SongEntity::class,
         parentColumn = "playlistId",
         entityColumn = "songId",
-        associateBy = Junction(PLaylistAndSongEntity::class)
+        associateBy = Junction(PlaylistAndSongEntity::class)
     )
-    val songs : List<SongEntity>
+    val songs: List<SongWithArtists>
 )

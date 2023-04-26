@@ -36,7 +36,7 @@ class ChosenSongViewHolder(
             error(R.drawable.blank_song_cover)
         }
         binding.songName.text = item.name
-        binding.songArtist.text = item.artist
+        binding.songArtist.text = item.getArtistNames()
 
         binding.addButton.setImageResource(R.drawable.ic_remove)
         binding.addButton.isSelected = true

@@ -10,7 +10,9 @@ import androidx.room.RoomDatabase
         MoodAttributeEntity::class,
         PlaylistEntity::class,
         SongEntity::class,
-        PLaylistAndSongEntity::class],
+        PlaylistAndSongEntity::class,
+        ArtistEntity::class,
+        SongAndArtistEntity::class],
 version = 1
 )
 abstract class PlayLystDatabase : RoomDatabase() {

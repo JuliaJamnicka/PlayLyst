@@ -9,7 +9,14 @@ data class Song(
     val spotifyId: String,
     val uri: String,
     val name: String,
-    val artist: String, // change this later
     val genre: String,
-    val imageLink: String?
-): Parcelable
+    val imageLink: String?,
+    val artists: List<Artist>
+): Parcelable {
+
+    fun getArtistNames(): String {
+        return artists.joinToString(", ") {
+            it.name
+        }
+    }
+}

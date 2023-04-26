@@ -20,7 +20,16 @@ interface PlaylistDao {
     fun deleteSong(song: SongEntity)
 
     @Insert
-    fun insert(pLaylistAndSongEntity: PLaylistAndSongEntity)
+    fun insert(pLaylistAndSongEntity: PlaylistAndSongEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(artistEntity: ArtistEntity) : Long
+
+    @Delete
+    fun deleteArtist(artist: ArtistEntity)
+
+    @Insert
+    fun insert(songAndArtistEntity: SongAndArtistEntity)
 
     @Transaction
     @Query("SELECT * FROM PlaylistEntity")
@@ -37,4 +46,8 @@ interface PlaylistDao {
 
     @Query("DELETE FROM PlaylistAndSongEntity")
     fun deleteAllPlaylistAndSong()
+
+    @Transaction
+    @Query("SELECT * FROM SongEntity")
+    fun getSongsWithArtists(): List<SongWithArtists>
 }

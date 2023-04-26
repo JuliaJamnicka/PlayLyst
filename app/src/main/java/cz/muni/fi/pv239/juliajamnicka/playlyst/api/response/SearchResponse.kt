@@ -40,7 +40,8 @@ data class SearchResponse(
             val href: String,
             val id: String,
             val name: String,
-            val uri: String
+            val uri: String,
+            val images: List<Image>
         )
 
         data class Image(

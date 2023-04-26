@@ -36,7 +36,7 @@ class SearchSongViewHolder(
             error(R.drawable.blank_song_cover)
         }
         binding.songName.text = item.name
-        binding.songArtist.text = item.artist
+        binding.songArtist.text = item.getArtistNames()
 
         binding.addButton.isSelected = false
         binding.addButton.visibility = View.VISIBLE
