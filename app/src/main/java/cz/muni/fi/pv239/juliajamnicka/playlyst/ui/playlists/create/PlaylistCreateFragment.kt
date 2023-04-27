@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Mood
+import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttribute
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
@@ -59,6 +62,7 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private var chosenSongs: MutableList<Song> = mutableListOf()
+    private var chosenAttributes: List<MoodAttribute> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,14 +87,14 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.visibility = View.VISIBLE
 
         sendTokenToRepo()
-        showIncludeSwitch(false)
+        showNoSearchScreen(false)
 
         binding.search.setOnCloseListener {
             binding.chosenRecyclerView.visibility = View.VISIBLE
             binding.saveButton.visibility = View.VISIBLE
 
             if (chosenSongs.isNotEmpty()) {
-                showIncludeSwitch(true)
+                showNoSearchScreen(true)
             }
             false
         }
@@ -104,7 +108,7 @@ class PlaylistCreateFragment : Fragment() {
 
             override fun onQueryTextSubmit(query: String): Boolean {
                 binding.chosenRecyclerView.visibility = View.GONE
-                showIncludeSwitch(false)
+                showNoSearchScreen(false)
                 binding.saveButton.visibility = View.GONE
                 binding.searchDoneButton.visibility = View.VISIBLE
 
@@ -124,6 +128,7 @@ class PlaylistCreateFragment : Fragment() {
 
         binding.searchDoneButton.setOnClickListener {
             hideSearch()
+            binding.scrollview.fullScroll(ScrollView.FOCUS_UP)
         }
 
         spotifyRepository.getGenreSeeds(
@@ -133,6 +138,18 @@ class PlaylistCreateFragment : Fragment() {
                     "Error getting genres list", Toast.LENGTH_SHORT).show()
             }
         )
+
+        binding.moodButton.setOnClickListener {
+            findNavController().navigate(PlaylistCreateFragmentDirections
+                .actionPlaylistCreateFragmentToCreatePlaylistAddMoodBottomSheet())
+        }
+
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Mood>("mood")
+            ?.observe(viewLifecycleOwner) {
+                chosenAttributes = it.attributes
+            }
+
 
         binding.saveButton.setOnClickListener {
             playlistRepository.save("New playlist", chosenSongs,
@@ -145,7 +162,7 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.visibility = View.VISIBLE
         binding.searchDoneButton.visibility = View.GONE
         binding.saveButton.visibility = View.VISIBLE
-        showIncludeSwitch(chosenSongs.isNotEmpty())
+        showNoSearchScreen(chosenSongs.isNotEmpty())
         searchAdapter.submitList(emptyList())
     }
 
@@ -191,13 +208,16 @@ class PlaylistCreateFragment : Fragment() {
         chosenAdapter.notifyDataSetChanged()
     }
 
-    private fun showIncludeSwitch(show: Boolean) {
+    private fun showNoSearchScreen(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
         binding.includeTitle.visibility = visibility
         binding.includeSwitch.visibility = visibility
 
         binding.genresTitle.visibility = visibility
         binding.genresScroll.visibility = visibility
+
+        binding.moodTitle.visibility = visibility
+        binding.moodButton.visibility = visibility
     }
 
     override fun onResume() {

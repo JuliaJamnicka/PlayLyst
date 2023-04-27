@@ -22,4 +22,6 @@
     <string name="create_playlist_include_songs">Include seeder songs in the playlist</string>
     <string name="create_playlist_save_button">Generate playlist</string>
     <string name="create_playlist_choose_tags">Choose genres to include</string>
+    <string name="create_playlist_choose_mood">Customize the mood?</string>
+    <string name="create_playlist_mood_button">Choose mood</string>
 </resources>

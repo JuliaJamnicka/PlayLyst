@@ -57,5 +57,13 @@
         android:id="@+id/playlistCreateFragment"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create.PlaylistCreateFragment"
         android:label="Create playlist"
-        tools:layout="@layout/fragment_playlist_create" />
+        tools:layout="@layout/fragment_playlist_create" >
+        <action
+            android:id="@+id/action_playlistCreateFragment_to_createPlaylistAddMoodBottomSheet"
+            app:destination="@id/createPlaylistAddMoodBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/createPlaylistAddMoodBottomSheet"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create.CreatePlaylistAddMoodBottomSheet"
+        android:label="CreatePlaylistAddMoodBottomSheet" />
 </navigation>
