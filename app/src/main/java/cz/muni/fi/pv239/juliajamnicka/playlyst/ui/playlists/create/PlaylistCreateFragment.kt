@@ -3,6 +3,7 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 import android.app.ActionBar.LayoutParams
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -148,6 +149,9 @@ class PlaylistCreateFragment : Fragment() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Mood>("mood")
             ?.observe(viewLifecycleOwner) {
                 chosenAttributes = it.attributes
+
+                binding.moodTitle.text = it.name
+                binding.moodTitle.setTextColor(Color.parseColor(it.color))
             }
 
 

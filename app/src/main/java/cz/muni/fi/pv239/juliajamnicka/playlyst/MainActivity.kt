@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         if (false) { // check if authorization code present
             // aaand this is ignored, great
             navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
-        } else { // check validity of access token in the background, refresh it if necessary
+        } else {
             navGraph.setStartDestination(R.id.playlistsFragment)
         }
     }
