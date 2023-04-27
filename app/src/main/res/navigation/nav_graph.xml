@@ -65,5 +65,9 @@
     <dialog
         android:id="@+id/createPlaylistAddMoodBottomSheet"
         android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create.CreatePlaylistAddMoodBottomSheet"
-        android:label="CreatePlaylistAddMoodBottomSheet" />
+        android:label="CreatePlaylistAddMoodBottomSheet" >
+        <action
+            android:id="@+id/action_createPlaylistAddMoodBottomSheet_to_moodAddEditFragment"
+            app:destination="@id/moodAddEditFragment" />
+    </dialog>
 </navigation>

@@ -8,6 +8,10 @@ interface MoodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMood(entity: MoodEntity): Long
 
+    @Transaction
+    @Query("SELECT * FROM MoodEntity WHERE moodId=:moodId")
+    fun getMood(moodId: Long) : MoodWithAttributes
+
     @Update
     fun updateMood(mood: MoodEntity)
 

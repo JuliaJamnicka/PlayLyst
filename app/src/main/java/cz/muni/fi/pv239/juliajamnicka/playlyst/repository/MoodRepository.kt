@@ -12,7 +12,8 @@ class MoodRepository(
     context : Context,
     private val dao : MoodDao = PlayLystDatabase.create(context).moodDao()
 ) {
-    fun saveOrUpdate(name: String, color: String, attributes: List<MoodAttribute>, id: Long? = null) {
+    fun saveOrUpdate(name: String, color: String, attributes: List<MoodAttribute>, id: Long? = null)
+    : Mood {
         val mood = Mood(
             id = id ?: 0,
             name = name,
@@ -39,6 +40,7 @@ class MoodRepository(
             )
             dao.insertMoodAttribute(moodAttribute.toEntity())
         }
+        return dao.getMood(moodId).toAppData()
     }
 
     fun delete(mood : Mood) =

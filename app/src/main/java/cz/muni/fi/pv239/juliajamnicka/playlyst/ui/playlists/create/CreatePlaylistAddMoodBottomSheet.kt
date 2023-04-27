@@ -48,6 +48,11 @@ class CreatePlaylistAddMoodBottomSheet : BottomSheetDialogFragment() {
 
         refreshList()
 
+        binding.addButton.setOnClickListener {
+            findNavController().navigate(CreatePlaylistAddMoodBottomSheetDirections
+                .actionCreatePlaylistAddMoodBottomSheetToMoodAddEditFragment())
+        }
+
     }
 
     private fun refreshList() {

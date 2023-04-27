@@ -82,8 +82,11 @@ class MoodAddEditFragment : Fragment() {
             val name = binding.nameEditText.text.toString()
             val color = "#${binding.colorEditText.text.toString()}"
 
-            moodRepository.saveOrUpdate(name, color, getSortedAttributes(),
+            val mood = moodRepository.saveOrUpdate(name, color, getSortedAttributes(),
                 args.mood?.id)
+
+            val navController = findNavController()
+            navController.previousBackStackEntry?.savedStateHandle?.set("mood", mood)
             findNavController().popBackStack()
         }
 
