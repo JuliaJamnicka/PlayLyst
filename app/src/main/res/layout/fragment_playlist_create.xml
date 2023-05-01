@@ -153,7 +153,7 @@
                 android:src="@drawable/ic_moods_filled"
                 android:text="@string/create_playlist_mood_button"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:outlineAmbientShadowColor="?colorPrimary"
+                app:strokeColor="?colorPrimary"
                 android:visibility="gone"
                 android:clipToPadding="false" />
 
