@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_playlistCreateFragment_to_createPlaylistAddMoodBottomSheet"
             app:destination="@id/createPlaylistAddMoodBottomSheet" />
+        <action
+            android:id="@+id/action_playlistCreateFragment_to_savePlaylistFragment"
+            app:destination="@id/savePlaylistFragment" />
     </fragment>
     <dialog
         android:id="@+id/createPlaylistAddMoodBottomSheet"
@@ -70,4 +73,12 @@
             android:id="@+id/action_createPlaylistAddMoodBottomSheet_to_moodAddEditFragment"
             app:destination="@id/moodAddEditFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/savePlaylistFragment"
+        android:name="cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create.SavePlaylistFragment"
+        android:label="Save playlist" >
+        <argument
+            android:name="songs"
+            app:argType="cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song[]" />
+    </fragment>
 </navigation>

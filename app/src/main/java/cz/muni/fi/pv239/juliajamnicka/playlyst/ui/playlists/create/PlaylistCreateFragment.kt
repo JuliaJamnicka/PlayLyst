@@ -57,9 +57,8 @@ class PlaylistCreateFragment : Fragment() {
         )
     }
 
-    private val spotifyRepository: SpotifyRepository = SpotifyRepository()
-    private val playlistRepository: PlaylistRepository by lazy {
-        PlaylistRepository(requireContext())
+    private val spotifyRepository: SpotifyRepository by lazy {
+        SpotifyRepository()
     }
 
     private var chosenSongs: MutableList<Song> = mutableListOf()
@@ -156,9 +155,7 @@ class PlaylistCreateFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener {
-            playlistRepository.save("New playlist", chosenSongs,
-                imageLink = chosenSongs[0].imageLink)
-            findNavController().navigateUp()
+            generateSongs()
         }
     }
 
@@ -193,6 +190,28 @@ class PlaylistCreateFragment : Fragment() {
            binding.genresChipGroup.removeView(genre)
            binding.genresChipGroup.addView(genre)
        }
+    }
+
+    private fun generateSongs() {
+        fun createGenres() = binding.genresChipGroup.children
+            .map { it as Chip }
+            .filter { it.isChecked }
+            .map { it.text.toString() }
+            .toList()
+
+        spotifyRepository.getRecommendations(
+            songs = chosenSongs,
+            genres = createGenres(),
+            attributes = chosenAttributes,
+            success = { (seedInfo, songs) ->
+                findNavController().navigate(PlaylistCreateFragmentDirections
+                    .actionPlaylistCreateFragmentToSavePlaylistFragment(songs.toTypedArray()))
+            },
+            fail = {
+                Toast.makeText(context,
+                    "Error generating songs", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     private fun sendTokenToRepo() {

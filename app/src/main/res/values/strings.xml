@@ -24,4 +24,7 @@
     <string name="create_playlist_choose_tags">Choose genres to include</string>
     <string name="create_playlist_choose_mood">Customize the mood?</string>
     <string name="create_playlist_mood_button">Choose mood</string>
+    <string name="create_playlist_upload_image_button">Choose image</string>
+    <string name="create_playlist_change_image_button">Change image</string>
+    <string name="create_playlist_playlist_name_helper_text">Choose a name for your new playlist</string>
 </resources>
