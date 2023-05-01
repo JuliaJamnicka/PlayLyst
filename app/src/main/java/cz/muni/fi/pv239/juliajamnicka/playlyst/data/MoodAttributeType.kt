@@ -3,6 +3,7 @@ data class AttributeThresholds(
     val minValue: Double,
     val maxValue: Double,
     val stepSize: Double,
+    // change canHaveRange (since actually all of them can) to diff of int and float
     val canHaveRange: Boolean,
     val defaultValue: Double? = null,
     val lowerDefaultValue: Double? = null,
@@ -99,7 +100,7 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 100.0,
             stepSize = 5.0,
-            canHaveRange = true,
+            canHaveRange = false,
             defaultValue = 70.0,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 100.0
