@@ -43,6 +43,7 @@ android {
 dependencies {
     // KT
     implementation "androidx.core:core-ktx:1.10.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
 
     //SPLASH SCREEN
     implementation "androidx.core:core-splashscreen:1.0.1"
