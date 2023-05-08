@@ -21,7 +21,8 @@ import retrofit2.Response
 class SpotifyRepository(
     private val spotifyWebApiService: SpotifyWebApiService = RetrofitUtil.createSpotifyWebApiService()
 ) {
-    private lateinit var accessToken: String
+    // TODO: this probably wont be updated on time? call it in each function?
+    private var accessToken = SessionManager.getToken("access_token")
 
     fun getSearchResults(query: String, success: (List<Song>) -> Unit, fail: () -> Unit) {
         spotifyWebApiService.search(

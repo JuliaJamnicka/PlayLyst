@@ -32,5 +32,6 @@ object RetrofitUtil {
             }
 
             addInterceptor(logging)
+            authenticator(TokenAuthenticator())
         }.build()
 }

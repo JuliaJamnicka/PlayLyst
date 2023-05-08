@@ -38,6 +38,15 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            buildConfigField "String", "SPOTIFY_CLIENT_ID", "\"97d9d9f74c0e45b5a1bf50328802317c\""
+            buildConfigField "String", "SPOTIFY_CLIENT_SECRET", "\"b547af488b564526a0e06ce7b1a29474\""
+            buildConfigField "String", "REDIRECT_URI", "\"cz.muni.fi.pv239.juliajamnicka.playlyst://callback\""
+        }
+    }
 }
 
 dependencies {
@@ -63,7 +72,10 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
     // DATASTORE
-    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
+
 
     // SPOTIFY
     implementation 'com.spotify.android:auth:1.2.5'

@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ActivityMainBinding
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        SessionManager.setup(applicationContext)
 
         setSupportActionBar(binding.appbar)
 
@@ -39,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.setupWithNavController(navController, appBarConfig)
         binding.bottomNavigation.setupWithNavController(navController)
 
-        if (false) { // check if authorization code present
+        if (SessionManager.getToken("authorization_code") == null) { // check if authorization code present
             // aaand this is ignored, great
             navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
         } else {

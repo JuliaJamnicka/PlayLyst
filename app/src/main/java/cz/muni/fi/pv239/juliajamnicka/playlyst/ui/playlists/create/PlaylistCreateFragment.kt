@@ -1,7 +1,6 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
 import android.app.ActionBar.LayoutParams
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -24,7 +23,6 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Mood
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttribute
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
-import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 
 
@@ -86,7 +84,6 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.adapter = chosenAdapter
         binding.chosenRecyclerView.visibility = View.VISIBLE
 
-        sendTokenToRepo()
         showNoSearchScreen(false)
 
         binding.search.setOnCloseListener {
@@ -212,13 +209,6 @@ class PlaylistCreateFragment : Fragment() {
                     "Error generating songs", Toast.LENGTH_SHORT).show()
             }
         )
-    }
-
-    private fun sendTokenToRepo() {
-        val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val token = preferences.getString("token", null) ?: ""
-
-        spotifyRepository.updateAccessToken(token)
     }
 
     private fun refreshSearch() {
