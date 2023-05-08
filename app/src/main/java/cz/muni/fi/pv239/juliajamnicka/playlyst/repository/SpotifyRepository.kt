@@ -21,12 +21,9 @@ import retrofit2.Response
 class SpotifyRepository(
     private val spotifyWebApiService: SpotifyWebApiService = RetrofitUtil.createSpotifyWebApiService()
 ) {
-    // TODO: this probably wont be updated on time? call it in each function?
-    private var accessToken = SessionManager.getToken("access_token")
-
     fun getSearchResults(query: String, success: (List<Song>) -> Unit, fail: () -> Unit) {
         spotifyWebApiService.search(
-            token = "Bearer $accessToken",
+            token = "Bearer ${SessionManager.getToken("access_token")}",
             query = query,
             type = listOf("track"),
             market = null,
@@ -50,10 +47,6 @@ class SpotifyRepository(
             }
         })
 
-    }
-
-    fun updateAccessToken(token: String) {
-        accessToken = token
     }
 
     private fun mapSearchResponse(response: SearchResponse): List<Song> {
@@ -84,7 +77,7 @@ class SpotifyRepository(
 
     fun getGenreSeeds(success: (List<String>) -> Unit, fail: () -> Unit) {
         spotifyWebApiService.getGenreSeeds(
-            token = "Bearer $accessToken"
+            token = "Bearer ${SessionManager.getToken("access_token")}"
         ).enqueue(object : Callback<GenreSeedResponse> {
             override fun onResponse(call: Call<GenreSeedResponse>, response: Response<GenreSeedResponse>) {
                 val responseBody = response.body()
@@ -137,7 +130,7 @@ class SpotifyRepository(
         }
 
         spotifyWebApiService.getRecommendations(
-            token = "Bearer $accessToken",
+            token = "Bearer ${SessionManager.getToken("access_token")}",
             queries = createRecommendationsQueries()
         ).enqueue(object : Callback<RecommendationsResponse> {
             override fun onResponse(call: Call<RecommendationsResponse>,
@@ -177,7 +170,7 @@ class SpotifyRepository(
         // TODO surely this can be done better with retrofit? look into it
         fun getPlaylistCover(playlist: CreatePlaylistResponse) {
             spotifyWebApiService.getPlaylistCoverImage(
-                token = "Bearer $accessToken",
+                token = "Bearer ${SessionManager.getToken("access_token")}",
                 playlistId = playlist.id
             ).enqueue(object : Callback<List<Image>> {
                 override fun onResponse(call: Call<List<Image>>, response: Response<List<Image>>) {
@@ -200,7 +193,7 @@ class SpotifyRepository(
 
         fun addSongsToPlaylist(playlist: CreatePlaylistResponse) {
             spotifyWebApiService.addItemsToPlaylist(
-                token = "Bearer $accessToken",
+                token = "Bearer ${SessionManager.getToken("access_token")}",
                 playlistId = playlist.id,
                 body = AddSongsBody(
                     uris = songs.map{ it.uri }
@@ -227,7 +220,7 @@ class SpotifyRepository(
             val requestBody = playlistImage!!.encodeToBase64String()
                 .toRequestBody("image/jpeg".toMediaTypeOrNull())
             spotifyWebApiService.addCustomPlaylistCoverImage(
-                token = "Bearer $accessToken",
+                token = "Bearer ${SessionManager.getToken("access_token")}",
                 playlistId = playlist.id,
                 body = requestBody
             ).enqueue(object : Callback<Void> {
@@ -249,7 +242,7 @@ class SpotifyRepository(
 
         fun createPlaylist(userId: String) {
             spotifyWebApiService.createPlaylist(
-                token = "Bearer $accessToken",
+                token = "Bearer ${SessionManager.getToken("access_token")}",
                 userId = userId,
                 body = NewPlaylistBody(
                     name = name
@@ -278,7 +271,7 @@ class SpotifyRepository(
 
         fun getUserInfo() {
             spotifyWebApiService.getCurrentUsersProfile(
-                token = "Bearer $accessToken",
+                token = "Bearer ${SessionManager.getToken("access_token")}",
             ).enqueue(object : Callback<UserInfoResponse> {
                     override fun onResponse(call: Call<UserInfoResponse>, response: Response<UserInfoResponse>) {
                         val responseBody = response.body()

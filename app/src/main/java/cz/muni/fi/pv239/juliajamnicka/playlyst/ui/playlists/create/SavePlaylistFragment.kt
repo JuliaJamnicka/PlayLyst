@@ -1,6 +1,5 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -85,8 +84,6 @@ class SavePlaylistFragment : Fragment() {
 
         refreshSongs()
 
-        sendTokenToRepo()
-
         binding.saveButton.setOnClickListener {
 
             spotifyRepository.uploadPlaylist(
@@ -121,13 +118,6 @@ class SavePlaylistFragment : Fragment() {
     private fun refreshSongs() {
         adapter.submitList(chosenSongs)
         adapter.notifyDataSetChanged()
-    }
-
-    private fun sendTokenToRepo() {
-        val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val token = preferences.getString("token", null) ?: ""
-
-        spotifyRepository.updateAccessToken(token)
     }
 
     override fun onResume() {
