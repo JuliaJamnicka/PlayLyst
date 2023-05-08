@@ -3,12 +3,17 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.repository
 import android.graphics.Bitmap
 import android.util.Log
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.GenreSeedResponse
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.RecommendationsResponse
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.SearchResponse
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.SessionManager
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.AddSongsBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Track
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.services.SpotifyWebApiService
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.*
+import cz.muni.fi.pv239.juliajamnicka.playlyst.util.encodeToBase64String
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -125,7 +130,7 @@ class SpotifyRepository(
 
             queries["seed_tracks"] = seedSongIds
             queries["seed_genres"] = seedGenres
-            queries["limit"] = 50
+            queries["limit"] = 20
 
             return queries
         }
@@ -165,14 +170,147 @@ class SpotifyRepository(
         return Pair(seedsInfos, mapTracksToSongs(response.tracks))
     }
 
-    fun createPlaylist(name: String, songs: List<Song>, playlistImage: Bitmap?,
-                       success: (Playlist) -> Unit, failure: () -> Unit) {
+    fun uploadPlaylist(name: String, songs: List<Song>, playlistImage: Bitmap?,
+                       success: (Playlist) -> Unit, fail: () -> Unit) {
 
+        // TODO surely this can be done better with retrofit? look into it
+        fun getPlaylistCover(playlist: CreatePlaylistResponse) {
+            spotifyWebApiService.getPlaylistCoverImage(
+                token = "Bearer $accessToken",
+                playlistId = playlist.id
+            ).enqueue(object : Callback<List<Image>> {
+                override fun onResponse(call: Call<List<Image>>, response: Response<List<Image>>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        val imageLink = responseBody.first().url
+                        success(mapCreatePlaylistResponseToPlaylist(playlist, imageLink, songs))
+                    } else {
+                        Log.e(this::class.simpleName, "body was null")
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Image>>, t: Throwable) {
+                    Log.e(this::class.simpleName, t.message, t)
+                    fail()
+                }
+            })
+        }
+
+        fun addSongsToPlaylist(playlist: CreatePlaylistResponse) {
+            spotifyWebApiService.addItemsToPlaylist(
+                token = "Bearer $accessToken",
+                playlistId = playlist.id,
+                body = AddSongsBody(
+                    uris = songs.map{ it.uri }
+                )
+            ).enqueue(object : Callback<AddItemsToPlaylistResponse> {
+                override fun onResponse(call: Call<AddItemsToPlaylistResponse>,
+                                        response: Response<AddItemsToPlaylistResponse>) {
+                    if (response.isSuccessful) {
+                        getPlaylistCover(playlist)
+                    } else {
+                        Log.e(this::class.simpleName, "body was null")
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<AddItemsToPlaylistResponse>, t: Throwable) {
+                    Log.e(this::class.simpleName, t.message, t)
+                    fail()
+                }
+            })
+        }
+
+        fun addCoverToPlaylist(playlist: CreatePlaylistResponse) {
+            val requestBody = playlistImage!!.encodeToBase64String()
+                .toRequestBody("image/jpeg".toMediaTypeOrNull())
+            spotifyWebApiService.addCustomPlaylistCoverImage(
+                token = "Bearer $accessToken",
+                playlistId = playlist.id,
+                body = requestBody
+            ).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        addSongsToPlaylist(playlist)
+                    } else {
+                        Log.e(this::class.simpleName, "body was null")
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e(this::class.simpleName, t.message, t)
+                    fail()
+                }
+            })
+        }
+
+        fun createPlaylist(userId: String) {
+            spotifyWebApiService.createPlaylist(
+                token = "Bearer $accessToken",
+                userId = userId,
+                body = NewPlaylistBody(
+                    name = name
+                )
+            ).enqueue(object : Callback<CreatePlaylistResponse> {
+                override fun onResponse(call: Call<CreatePlaylistResponse>, response: Response<CreatePlaylistResponse>) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        if (playlistImage != null) {
+                            addCoverToPlaylist(responseBody)
+                        } else {
+                            addSongsToPlaylist(responseBody)
+                        }
+                    } else {
+                        Log.e(this::class.simpleName, "body was null")
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<CreatePlaylistResponse>, t: Throwable) {
+                    Log.e(this::class.simpleName, t.message, t)
+                    fail()
+                }
+            })
+        }
+
+        fun getUserInfo() {
+            spotifyWebApiService.getCurrentUsersProfile(
+                token = "Bearer $accessToken",
+            ).enqueue(object : Callback<UserInfoResponse> {
+                    override fun onResponse(call: Call<UserInfoResponse>, response: Response<UserInfoResponse>) {
+                        val responseBody = response.body()
+                        if (response.isSuccessful && responseBody != null) {
+                            createPlaylist(responseBody.id)
+                        } else {
+                            Log.e(this::class.simpleName, "body was null")
+                            fail()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                        Log.e(this::class.simpleName, t.message, t)
+                        fail()
+                    }
+                })
+        }
+
+        getUserInfo()
     }
 
-    private fun getUserInfo(): String {
-        spotifyWebApiService.getCurrentUsersProfile()
-
-        return ""
+    fun mapCreatePlaylistResponseToPlaylist(
+        playlist: CreatePlaylistResponse,
+        imageLink: String,
+        songs: List<Song>
+    ): Playlist {
+        return Playlist(
+            id = 0,
+            spotifyId = playlist.id,
+            uri = playlist.uri,
+            name = playlist.name,
+            imageLink = imageLink,
+            songs = songs
+        )
     }
 }

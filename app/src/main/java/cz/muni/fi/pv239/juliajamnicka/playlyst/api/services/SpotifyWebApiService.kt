@@ -1,8 +1,10 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.api.services
 
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.AddSongsBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.RecommendationsQueries
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -15,6 +17,7 @@ interface SpotifyWebApiService {
 
     @GET("me")
     fun getCurrentUsersProfile(
+        @Header("Authorization") token: String,
     ): Call<UserInfoResponse>
 
     @GET("search")
@@ -32,21 +35,30 @@ interface SpotifyWebApiService {
         @Header("Authorization") token: String,
     ): Call<GenreSeedResponse>
 
-    @POST("/users/{user_id}/playlists")
+    @POST("users/{user_id}/playlists")
     fun createPlaylist(
+        @Header("Authorization") token: String,
         @Path("user_id") userId: String,
-        @Body Body: NewPlaylistBody
+        @Body body: NewPlaylistBody
     ) : Call<CreatePlaylistResponse>
 
-    @PUT("/playlists/{playlist_id}/images")
+    @PUT("playlists/{playlist_id}/images")
     fun addCustomPlaylistCoverImage(
+        @Header("Authorization") token: String,
         @Path("playlist_id") playlistId: String,
-        @Body Body: String
-    )
+        @Body body: RequestBody
+    ): Call<Void>
+
+    @GET("playlists/{playlist_id}/images")
+    fun getPlaylistCoverImage(
+        @Header("Authorization") token: String,
+        @Path("playlist_id") playlistId: String
+    ): Call<List<Image>>
 
     @POST("playlists/{playlist_id}/tracks")
     fun addItemsToPlaylist(
+        @Header("Authorization") token: String,
         @Path("playlist_id") playlistId: String,
-        @Query("uris") uris: String
-    ): String
+        @Body body: AddSongsBody
+    ): Call<AddItemsToPlaylistResponse>
 }

@@ -1,5 +1,6 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -24,6 +25,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSavePlaylistB
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsAdapter
+import cz.muni.fi.pv239.juliajamnicka.playlyst.util.getResizedBitmap
 
 
 class SavePlaylistFragment : Fragment() {
@@ -83,15 +85,22 @@ class SavePlaylistFragment : Fragment() {
 
         refreshSongs()
 
-        binding.saveButton.setOnClickListener {
-            //spotifyRepository.createPlaylist
+        sendTokenToRepo()
 
-            playlistRepository.save(
+        binding.saveButton.setOnClickListener {
+
+            spotifyRepository.uploadPlaylist(
                 name = binding.nameEditText.text.toString(),
                 songs = chosenSongs,
-                imageLink = "" // spotify needs to return the url of the uploaded image first
+                playlistImage = playlistImage,
+                success = { playlist ->
+                    playlistRepository.saveOrUpdate(playlist)
+                    findNavController().popBackStack(R.id.playlistsFragment, false)
+                },
+                fail = {
+                    Toast.makeText(context, "Error uploading playlist", Toast.LENGTH_SHORT).show()
+                }
             )
-            findNavController()
         }
     }
 
@@ -100,6 +109,8 @@ class SavePlaylistFragment : Fragment() {
             val uri = activityResult.data?.data
             playlistImage = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
             binding.playlistCover.setImageBitmap(playlistImage)
+
+            playlistImage = playlistImage!!.getResizedBitmap(400, 400)
 
             binding.uploadImageButton.text = getString(R.string.create_playlist_change_image_button)
         } else {
@@ -110,6 +121,18 @@ class SavePlaylistFragment : Fragment() {
     private fun refreshSongs() {
         adapter.submitList(chosenSongs)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun sendTokenToRepo() {
+        val preferences = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val token = preferences.getString("token", null) ?: ""
+
+        spotifyRepository.updateAccessToken(token)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.recyclerView.scrollToPosition(0)
     }
 
 }
