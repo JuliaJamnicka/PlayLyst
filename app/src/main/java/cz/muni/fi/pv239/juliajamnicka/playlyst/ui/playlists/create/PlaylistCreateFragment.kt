@@ -237,10 +237,4 @@ class PlaylistCreateFragment : Fragment() {
         super.onResume()
         refreshSearch()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.setBottomNavigationVisibility(View.VISIBLE)
-    }
 }

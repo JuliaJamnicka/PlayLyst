@@ -45,6 +45,9 @@ class MoodAddEditFragment : Fragment() {
 
         setUpAppBar()
 
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.GONE)
+
         val attributes = args.mood?.attributes ?: createDefaultAttributesList()
         pickedAttributes = attributes
             .sortedBy { it.name }
@@ -142,5 +145,11 @@ class MoodAddEditFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         refreshList()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.VISIBLE)
     }
 }

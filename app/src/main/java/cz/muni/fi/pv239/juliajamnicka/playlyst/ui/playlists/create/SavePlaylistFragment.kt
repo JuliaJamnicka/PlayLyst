@@ -63,14 +63,14 @@ class SavePlaylistFragment : Fragment() {
     ): View {
         binding = FragmentSavePlaylistBinding.inflate(inflater, container, false)
 
-        val mainActivity = requireActivity() as MainActivity
-        mainActivity.setBottomNavigationVisibility(View.GONE)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.GONE)
 
         chosenSongs = args.songs.toMutableList()
 
@@ -123,6 +123,12 @@ class SavePlaylistFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.recyclerView.scrollToPosition(0)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val mainActivity = requireActivity() as MainActivity
+        mainActivity.setBottomNavigationVisibility(View.VISIBLE)
     }
 
 }
