@@ -33,6 +33,13 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         val navGraph = navController.graph
 
+        if (SessionManager.getToken("refresh_token") == null) {
+            // TODO: check if this actually works?
+            navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
+        } else {
+            navGraph.setStartDestination(R.id.playlistsFragment)
+        }
+
         val appBarConfig = AppBarConfiguration(
             setOf(
                 R.id.playlistsFragment,
@@ -42,12 +49,6 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.setupWithNavController(navController, appBarConfig)
         binding.bottomNavigation.setupWithNavController(navController)
 
-        if (SessionManager.getToken("authorization_code") == null) { // check if authorization code present
-            // aaand this is ignored, great
-            navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
-        } else {
-            navGraph.setStartDestination(R.id.playlistsFragment)
-        }
     }
 
     fun setBottomNavigationVisibility(visibility: Int) {

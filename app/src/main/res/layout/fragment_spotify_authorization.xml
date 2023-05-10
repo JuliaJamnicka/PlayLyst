@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_500"
     tools:context=".ui.authentication.SpotifyAuthorizationFragment">
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_app_logo_gradient"
-        android:layout_marginBottom="200dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        app:layout_constraintEnd_toEndOf="@id/login_button"
-        app:layout_constraintStart_toStartOf="@id/login_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+<!--    <ImageView-->
+<!--        android:id="@+id/app_logo"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:src="@drawable/ic_app_logo_white"-->
+<!--        android:layout_marginBottom="200dp"-->
+<!--        android:layout_marginStart="50dp"-->
+<!--        android:layout_marginEnd="50dp"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/login_button"-->
+<!--        app:layout_constraintStart_toStartOf="@id/login_button"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/app_name"
@@ -28,9 +29,10 @@
         android:textSize="50sp"
         android:fontFamily="@font/metropolis"
         android:textStyle="bold"
-        android:textColor="@color/purple_700"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/app_logo"
+        android:textColor="@color/white"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="200dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -42,11 +44,13 @@
         android:layout_height="wrap_content"
         android:text="@string/app_description"
         android:fontFamily="@font/circular_bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:textAlignment="center"
         android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,11 +63,15 @@
         android:layout_marginBottom="40dp"
         android:text="@string/spotify_login_button"
         android:fontFamily="@font/circular_bold"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:textAllCaps="false"
+        android:textColor="@color/purple_500"
         app:icon="@drawable/ic_spotify"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:iconTint="@color/purple_500"
+        android:backgroundTint="@color/white"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/app_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
