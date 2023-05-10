@@ -104,6 +104,7 @@ class PlaylistCreateFragment : Fragment() {
 
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
+            // TODO: implement debounce and partial loading
             override fun onQueryTextChange(newText: String): Boolean {
                 hideSearch()
                 return false
@@ -137,6 +138,7 @@ class PlaylistCreateFragment : Fragment() {
         spotifyRepository.getGenreSeeds(
             success = { genres -> showGenres(genres) },
             fail = {
+                // TODO: this shows even through Token Authenticator, fix?
                 Toast.makeText(context,
                     "Error getting genres list", Toast.LENGTH_SHORT).show()
             }
@@ -223,6 +225,7 @@ class PlaylistCreateFragment : Fragment() {
             .map { it.text.toString() }
             .toList()
 
+        // TODO: add getting of more results
         spotifyRepository.getRecommendations(
             songs = chosenSongs,
             genres = createGenres(),

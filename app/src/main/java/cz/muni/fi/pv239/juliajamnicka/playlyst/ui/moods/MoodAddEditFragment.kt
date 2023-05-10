@@ -65,6 +65,7 @@ class MoodAddEditFragment : Fragment() {
 
         setInitialValues()
 
+        // TODO: add checks
         binding.colorEditText.setOnFocusChangeListener { _, hasFocus ->
             val text = binding.colorEditText.text
             if (!hasFocus && text?.isNotEmpty() == true) {

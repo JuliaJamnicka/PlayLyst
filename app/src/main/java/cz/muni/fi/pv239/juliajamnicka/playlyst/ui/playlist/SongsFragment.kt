@@ -105,6 +105,7 @@ class SongsFragment : Fragment() {
             override fun onSuccess(result: Drawable) {
                 binding.playlistCover.setImageDrawable(result)
                 if (result is BitmapDrawable) {
+                    // TODO: add the 75% opacity to make results more accurate
                     determineAppBarTextColor(result.bitmap)
                 }
             }
