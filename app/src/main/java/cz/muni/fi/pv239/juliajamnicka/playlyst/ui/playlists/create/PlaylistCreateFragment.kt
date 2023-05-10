@@ -227,9 +227,11 @@ class PlaylistCreateFragment : Fragment() {
             songs = chosenSongs,
             genres = createGenres(),
             attributes = chosenAttributes,
-            success = { (seedInfo, songs) ->
+            success = { (_, songs) ->
+                val finalSongs = if (binding.includeSwitch.isChecked)
+                    chosenSongs + songs else songs
                 findNavController().navigate(PlaylistCreateFragmentDirections
-                    .actionPlaylistCreateFragmentToSavePlaylistFragment(songs.toTypedArray()))
+                    .actionPlaylistCreateFragmentToSavePlaylistFragment(finalSongs.toTypedArray()))
             },
             fail = {
                 Toast.makeText(context,
