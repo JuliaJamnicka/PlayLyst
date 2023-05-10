@@ -1,6 +1,8 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,6 +16,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,9 +26,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSavePlaylistBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
-import cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist.SongsAdapter
 import cz.muni.fi.pv239.juliajamnicka.playlyst.util.getResizedBitmap
-
 
 class SavePlaylistFragment : Fragment() {
 
@@ -34,6 +35,14 @@ class SavePlaylistFragment : Fragment() {
     private val fromGalleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             processFromGalleryResult(it)
+        }
+
+    private val permissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                fromGalleryLauncher.launch(intent)
+            }
         }
 
     private val adapter: ChosenSongsAdapter by lazy {
@@ -76,7 +85,15 @@ class SavePlaylistFragment : Fragment() {
 
         binding.uploadImageButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            fromGalleryLauncher.launch(intent)
+
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(), READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED)
+            {
+                fromGalleryLauncher.launch(intent)
+            } else {
+                permissionLauncher.launch(READ_EXTERNAL_STORAGE)
+            }
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
