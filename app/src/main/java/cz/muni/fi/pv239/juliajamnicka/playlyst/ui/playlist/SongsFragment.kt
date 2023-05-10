@@ -1,5 +1,10 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist
 
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import coil.load
+import coil.Coil
+import coil.request.ImageRequest
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSongsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
+import cz.muni.fi.pv239.juliajamnicka.playlyst.util.isLight
 
 
 class SongsFragment : Fragment() {
@@ -56,9 +63,8 @@ class SongsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.playlistCover.load(args.playlist?.imageLink) {
-            error(R.drawable.blank_song_cover)
-        }
+        loadPlaylistCover()
+
         binding.playlistName.text = args.playlist?.name
 
         binding.backButton.setOnClickListener {
@@ -90,6 +96,35 @@ class SongsFragment : Fragment() {
 
         refreshList()
 
+    }
+
+    private fun loadPlaylistCover() {
+        val imageLoader = Coil.imageLoader(requireContext())
+
+        val target = object : coil.target.Target {
+            override fun onSuccess(result: Drawable) {
+                binding.playlistCover.setImageDrawable(result)
+                if (result is BitmapDrawable) {
+                    determineAppBarTextColor(result.bitmap)
+                }
+            }
+        }
+
+        val request = ImageRequest.Builder(requireContext())
+            .data(args.playlist?.imageLink)
+            .target(target)
+            .allowHardware(false)
+            .build()
+
+        imageLoader.enqueue(request)
+    }
+
+    private fun determineAppBarTextColor(cover: Bitmap) {
+        val color = ColorStateList.valueOf(if (cover.isLight()) Color.BLACK else Color.WHITE)
+
+        binding.playlistName.setTextColor(color)
+        binding.backButton.imageTintList = color
+        binding.deleteButton.imageTintList = color
     }
 
     private fun refreshList() {

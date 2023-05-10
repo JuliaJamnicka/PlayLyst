@@ -1,9 +1,6 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.util
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Paint
+import android.graphics.*
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
@@ -31,4 +28,28 @@ fun Bitmap.getResizedBitmap(newWidth: Int, newHeight: Int): Bitmap {
     canvas.drawBitmap(this, 0.toFloat(), 0.toFloat(), Paint(Paint.FILTER_BITMAP_FLAG))
 
     return resizedBitmap
+}
+
+fun Bitmap.isLight(skipPixel: Int = 10): Boolean {
+    var r = 0
+    var g = 0
+    var b = 0
+    val height: Int = height
+    val width: Int = width
+
+    var n = 0
+    val pixels = IntArray(width * height)
+    this.getPixels(pixels, 0, width, 0, 0, width, height)
+
+    for (i in pixels.indices step skipPixel) {
+        val color = pixels[i]
+        r += Color.red(color)
+        g += Color.green(color)
+        b += Color.blue(color)
+        n++
+    }
+
+    val lightThreshold = 255 / 2
+
+    return (r + b + g) / (n * 3) > lightThreshold
 }
