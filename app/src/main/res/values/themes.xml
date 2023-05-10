@@ -98,4 +98,15 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <style name="MaterialAlertDialog_rounded" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/DialogCorners</item>
+        <item name="buttonBarNegativeButtonStyle">@style/CircularTextAppearance</item>
+    </style>
+
+    <style name="DialogCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+
 </resources>

@@ -1,20 +1,22 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist
 
-
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSongsBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
+
 
 class SongsFragment : Fragment() {
     private lateinit var binding: FragmentSongsBinding
@@ -61,6 +63,26 @@ class SongsFragment : Fragment() {
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.deleteButton.setOnClickListener {
+            val dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.alert_dialog_rounded, null)
+
+            val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded).apply {
+                setView(dialogView)
+            }.create()
+
+            dialogView.findViewById<Button>(R.id.negative_button).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogView.findViewById<Button>(R.id.positive_button).setOnClickListener {
+                playlistRepository.deletePlaylist(args.playlist!!)
+                findNavController().navigateUp()
+                dialog.cancel()
+            }
+            dialog.show()
         }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
