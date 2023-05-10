@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.util.Log
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.SessionManager
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.AddSongsBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.UpdateSongsBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
@@ -195,12 +195,12 @@ class SpotifyRepository(
             spotifyWebApiService.addItemsToPlaylist(
                 token = "Bearer ${SessionManager.getToken("access_token")}",
                 playlistId = playlist.id,
-                body = AddSongsBody(
+                body = UpdateSongsBody(
                     uris = songs.map{ it.uri }
                 )
-            ).enqueue(object : Callback<AddItemsToPlaylistResponse> {
-                override fun onResponse(call: Call<AddItemsToPlaylistResponse>,
-                                        response: Response<AddItemsToPlaylistResponse>) {
+            ).enqueue(object : Callback<UpdatePlaylistItemsResponse> {
+                override fun onResponse(call: Call<UpdatePlaylistItemsResponse>,
+                                        response: Response<UpdatePlaylistItemsResponse>) {
                     if (response.isSuccessful) {
                         getPlaylistCover(playlist)
                     } else {
@@ -209,7 +209,7 @@ class SpotifyRepository(
                     }
                 }
 
-                override fun onFailure(call: Call<AddItemsToPlaylistResponse>, t: Throwable) {
+                override fun onFailure(call: Call<UpdatePlaylistItemsResponse>, t: Throwable) {
                     Log.e(this::class.simpleName, t.message, t)
                     fail()
                 }
@@ -307,4 +307,53 @@ class SpotifyRepository(
             songs = songs
         )
     }
+
+    fun deletePlaylist(playlistId: String, success: () -> Unit, fail: () -> Unit) {
+        spotifyWebApiService.deletePlaylist(
+            token = "Bearer ${SessionManager.getToken("access_token")}",
+            playlistId = playlistId,
+        ).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    success()
+                } else {
+                    Log.e(this::class.simpleName, "playlist not deleted")
+                    fail()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e(this::class.simpleName, t.message, t)
+                fail()
+            }
+        })
+    }
+
+    fun deleteSongsFromPlaylist(playlistId: String, songs: List<Song>,
+                                success: () -> Unit, fail: () -> Unit) {
+        spotifyWebApiService.addItemsToPlaylist(
+            token = "Bearer ${SessionManager.getToken("access_token")}",
+            playlistId = playlistId,
+            body = UpdateSongsBody(
+                uris = songs.map{ it.uri }
+            )
+        ).enqueue(object : Callback<UpdatePlaylistItemsResponse> {
+            override fun onResponse(call: Call<UpdatePlaylistItemsResponse>,
+                                    response: Response<UpdatePlaylistItemsResponse>) {
+                if (response.isSuccessful) {
+                    success()
+                } else {
+                    Log.e(this::class.simpleName, "songs could not be deleted from playlist")
+                    fail()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdatePlaylistItemsResponse>, t: Throwable) {
+                Log.e(this::class.simpleName, t.message, t)
+                fail()
+            }
+        })
+    }
+
+
 }

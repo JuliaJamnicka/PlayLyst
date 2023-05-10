@@ -1,6 +1,6 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.api.services
 
-import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.AddSongsBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.UpdateSongsBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
@@ -59,6 +59,19 @@ interface SpotifyWebApiService {
     fun addItemsToPlaylist(
         @Header("Authorization") token: String,
         @Path("playlist_id") playlistId: String,
-        @Body body: AddSongsBody
-    ): Call<AddItemsToPlaylistResponse>
+        @Body body: UpdateSongsBody
+    ): Call<UpdatePlaylistItemsResponse>
+
+    @DELETE("playlists/{playlist_id}/tracks")
+    fun deletePlaylistItems(
+        @Header("Authorization") token: String,
+        @Path("playlist_id") playlistId: String,
+        @Body body: UpdateSongsBody
+    ): Call<UpdatePlaylistItemsResponse>
+
+    @DELETE("playlists/{playlist_id}/followers")
+    fun deletePlaylist(
+        @Header("Authorization") token: String,
+        @Path("playlist_id") playlistId: String
+    ) : Call<Void>
 }
