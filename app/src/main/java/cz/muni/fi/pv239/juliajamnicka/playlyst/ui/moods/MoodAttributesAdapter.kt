@@ -46,6 +46,7 @@ class MoodAttributeViewHolder(
         val description = MoodAttributeType.valueOf(item.name).getDescription()
         binding.description.text = description
 
+        // TODO: fix disappearing on slider change, why?
         binding.infoButton.setOnClickListener {
             binding.description.visibility = if (binding.description.isVisible)
                 View.GONE else
@@ -54,6 +55,7 @@ class MoodAttributeViewHolder(
             binding.infoButton.isSelected = binding.description.isVisible
         }
 
+        // TODO: make these range sliders
         binding.slider.valueFrom = item.minValue.toFloat()
         binding.slider.valueTo = item.maxValue.toFloat()
         binding.slider.stepSize = item.stepSize.toFloat()
