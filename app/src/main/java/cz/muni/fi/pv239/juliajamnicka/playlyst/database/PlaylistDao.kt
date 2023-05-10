@@ -22,6 +22,9 @@ interface PlaylistDao {
     @Insert
     fun insert(pLaylistAndSongEntity: PlaylistAndSongEntity)
 
+    @Delete
+    fun deletePlaylistAndSong(pLaylistAndSongEntity: PlaylistAndSongEntity)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(artistEntity: ArtistEntity) : Long
 

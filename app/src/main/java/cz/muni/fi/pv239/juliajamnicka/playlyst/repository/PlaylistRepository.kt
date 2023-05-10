@@ -6,6 +6,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.data.PlaylistAndSong
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.SongAndArtist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlayLystDatabase
+import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistAndSongEntity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistDao
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toAppData
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.mapper.toEntity
@@ -39,28 +40,18 @@ class PlaylistRepository(
         }
     }
 
-    fun save(name: String, songs: List<Song>, id: Long = 0, imageLink: String? = null) {
-        val playlist = Playlist(
-            id = id,
-            spotifyId = "",
-            uri = "",
-            name = name,
-            imageLink = imageLink,
-            songs = songs
-        )
-        saveOrUpdate(playlist)
-    }
-
     fun getAllPlaylists(): List<Playlist> =
         dao.getPlaylistsWithSongs()
             .map { it.toAppData() }
 
-    fun deletePlaylists() =
-        dao.deleteAllPlaylists()
-
-    fun deleteSongs() =
-        dao.deleteAllSongs()
-
-    fun deleteAllPlaylistAnSongs() =
-        dao.deleteAllPlaylistAndSong()
+    fun deletePlaylist(playlist: Playlist) {
+        for (song in playlist.songs) {
+            dao.deletePlaylistAndSong(PlaylistAndSongEntity(
+                playlistId = playlist.id,
+                songId = song.id
+            ))
+            dao.deleteSong(song.toEntity())
+        }
+        dao.deletePlaylist(playlist.toEntity())
+    }
 }
