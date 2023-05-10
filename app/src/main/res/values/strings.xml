@@ -4,6 +4,8 @@
     <string name="app_description">Create your own customizable playlists based on your mood and make
         your listening experience even more enjoyable.</string>
 
+    <string name="button_save">Save</string>
+
     <string name="bottom_nav_playlists_title">Playlists</string>
     <string name="bottom_nav_moods_title">Moods</string>
     <string name="bottom_nav_create_new_title">Create</string>

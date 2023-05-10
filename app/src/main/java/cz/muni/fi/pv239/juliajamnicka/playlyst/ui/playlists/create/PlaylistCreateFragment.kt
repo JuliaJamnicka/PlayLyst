@@ -1,17 +1,21 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.annotation.SuppressLint
 import android.app.ActionBar.LayoutParams
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.navigation.fragment.findNavController
@@ -86,6 +90,8 @@ class PlaylistCreateFragment : Fragment() {
 
         showNoSearchScreen(false)
 
+        setUpSearchStyle()
+
         binding.search.setOnCloseListener {
             binding.chosenRecyclerView.visibility = View.VISIBLE
             binding.saveButton.visibility = View.VISIBLE
@@ -156,6 +162,17 @@ class PlaylistCreateFragment : Fragment() {
         }
     }
 
+    @SuppressLint("DiscouragedApi")
+    private fun setUpSearchStyle() {
+        // it wasn't working any other way
+        val id = requireContext().resources.getIdentifier("android:id/search_src_text", null, null)
+        val searchText = binding.search.findViewById<TextView>(id)
+        if (searchText != null) {
+            searchText.typeface = ResourcesCompat.getFont(requireContext(), R.font.circular)
+            searchText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+    }
+
     private fun hideSearch() {
         binding.chosenRecyclerView.visibility = View.VISIBLE
         binding.searchDoneButton.visibility = View.GONE
@@ -166,17 +183,27 @@ class PlaylistCreateFragment : Fragment() {
 
     private fun showGenres(genres: List<String>) {
         for (genre in genres) {
-            val genreChip = Chip(requireContext()).apply {
+            val chip = layoutInflater.inflate(R.layout.genre_chip, binding.genresChipGroup, false) as Chip
+
+            val uncheckedColor =  AppCompatResources.getColorStateList(requireContext(), R.color.transparent_purple)
+            val checkedColor = AppCompatResources.getColorStateList(requireContext(), R.color.light_salmon)
+
+            chip.apply {
                 id = ViewCompat.generateViewId()
                 width = LayoutParams.WRAP_CONTENT
+                height = LayoutParams.WRAP_CONTENT
+                chipBackgroundColor = uncheckedColor
+                invalidateOutline()
                 text = genre
-                chipBackgroundColor = ColorStateList.valueOf(resources.getColor(R.color.purple_500))
-                setTextAppearance(R.style.chipTextAppearance)
-                isClickable = true
                 isCheckable = true
-                setOnCheckedChangeListener { _, _ -> sortGenres() }
+                isClickable = true
+                setOnCheckedChangeListener { _, _ ->
+                    chipBackgroundColor = if (isChecked) checkedColor else uncheckedColor
+                    sortGenres()
+                }
             }
-            binding.genresChipGroup.addView(genreChip)
+
+            binding.genresChipGroup.addView(chip)
         }
     }
 
