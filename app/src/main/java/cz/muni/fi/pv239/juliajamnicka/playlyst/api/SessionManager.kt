@@ -79,4 +79,6 @@ object SessionManager {
             }
         })
     }
+
+    fun isUserAuthorized(): Boolean = getToken("refresh_token") != null
 }

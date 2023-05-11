@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appbar)
 
         // this worked before i added the appbarconfig, now the back buttons' black AGAIN
+        // TODO: fix backButton color
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_appbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.show()
@@ -31,13 +32,12 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
-        val navGraph = navController.graph
 
-        if (SessionManager.getToken("refresh_token") == null) {
-            // TODO: check if this actually works?
-            navGraph.setStartDestination(R.id.spotifyAuthorizationFragment)
-        } else {
-            navGraph.setStartDestination(R.id.playlistsFragment)
+        navController.graph = navController.navInflater.inflate(R.navigation.nav_graph).apply {
+            setStartDestination( if (SessionManager.isUserAuthorized())
+                R.id.playlistsFragment else
+                    R.id.spotifyAuthorizationFragment
+            )
         }
 
         val appBarConfig = AppBarConfiguration(
@@ -48,10 +48,10 @@ class MainActivity : AppCompatActivity() {
         )
         binding.appbar.setupWithNavController(navController, appBarConfig)
         binding.bottomNavigation.setupWithNavController(navController)
-
     }
 
     fun setBottomNavigationVisibility(visibility: Int) {
         binding.bottomNavigation.visibility = visibility
     }
+
 }
