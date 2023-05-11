@@ -2,25 +2,26 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
 import android.annotation.SuppressLint
 import android.app.ActionBar.LayoutParams
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Mood
@@ -81,6 +82,27 @@ class PlaylistCreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!isNetworkAvailable()) {
+            val dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.no_internet_alert_dialog, null)
+
+            val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded).apply {
+                setView(dialogView)
+            }.create()
+
+            dialogView.findViewById<Button>(R.id.negative_button).setOnClickListener {
+                dialog.dismiss()
+                findNavController().navigateUp()
+            }
+
+            dialogView.findViewById<Button>(R.id.positive_button).setOnClickListener {
+                dialog.dismiss()
+                findNavController().navigateUp()
+                findNavController().navigate(R.id.playlistCreateFragment)
+            }
+            dialog.show()
+        }
+
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.searchRecyclerView.adapter = searchAdapter
 
@@ -137,11 +159,7 @@ class PlaylistCreateFragment : Fragment() {
 
         spotifyRepository.getGenreSeeds(
             success = { genres -> showGenres(genres) },
-            fail = {
-                // TODO: this shows even through Token Authenticator, fix?
-                Toast.makeText(context,
-                    "Error getting genres list", Toast.LENGTH_SHORT).show()
-            }
+            fail = {}
         )
 
         binding.moodButton.setOnClickListener {
@@ -268,5 +286,19 @@ class PlaylistCreateFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         refreshSearch()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return when {
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
     }
 }

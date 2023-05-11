@@ -35,4 +35,9 @@
     <string name="delete_playlist_dialog_message">Do you really want to delete this playlist?</string>
     <string name="delete_playlist_pos_button">Delete</string>
     <string name="delete_playlist_neg_button">Cancel</string>
+
+    <string name="no_internet_dialog_title">No internet connection</string>
+    <string name="no_internet_dialog_message">Please check you internet connection and try again.</string>
+    <string name="no_internet_pos_button">Retry</string>
+    <string name="no_internet_neg_button">Cancel</string>
 </resources>

@@ -73,7 +73,7 @@ class SongsFragment : Fragment() {
 
         binding.deleteButton.setOnClickListener {
             val dialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.alert_dialog_rounded, null)
+                .inflate(R.layout.playlist_delete_alert_dialog, null)
 
             val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded).apply {
                 setView(dialogView)
