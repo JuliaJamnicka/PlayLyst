@@ -7,11 +7,10 @@ import okhttp3.*
 
 class TokenAuthenticator: Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        return runBlocking {
-            var newToken: String? = null
+        var newToken: String? = null
 
-            val tt = SessionManager.getToken("access_token")
-
+        // TODO: asynchronous magic needs fix; return something maybe?
+        runBlocking {
             if (SessionManager.getToken("refresh_token") == null) {
                 SessionManager.getAccessToken(
                     success = { accessToken -> newToken = accessToken },
@@ -22,16 +21,14 @@ class TokenAuthenticator: Authenticator {
                     fail = { Log.e(this::class::simpleName.toString(), "did not work") })
             }
 
-            val pp = SessionManager.getToken("access_token")
-            (pp != tt)
-
-            if (newToken != null) {
-                SessionManager.saveToken("access_token", newToken!!)
-                response.request.newBuilder()
-                    .header("Authorization", "Bearer $newToken")
-                    .build()
-            }
-            null
         }
+
+        if (newToken != null) {
+            SessionManager.saveToken("access_token", newToken!!)
+            return response.request.newBuilder()
+                .header("Authorization", "Bearer $newToken")
+                .build()
+        }
+        return null
     }
 }

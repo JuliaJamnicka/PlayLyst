@@ -41,6 +41,7 @@ class SearchSongViewHolder(
         binding.addButton.isSelected = false
         binding.addButton.visibility = View.VISIBLE
 
+        // TODO: the actual add icon is not listening, fix
         binding.root.setOnClickListener {
             if (!binding.addButton.isSelected) {
                 onAddItemClick(item)
