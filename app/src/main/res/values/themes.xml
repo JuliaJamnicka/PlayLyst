@@ -19,6 +19,7 @@
         <item name="android:textColor">@color/dark_grey</item>
 
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
+        <item name="materialButtonStyle">@style/CircularButtonStyle</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -128,6 +129,11 @@
 
     <style name="SwitchStyle" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <!-- TODO: Why is the switch so massive? try to make it smaller -->
+    </style>
+
+    <style name="CircularButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/circular</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>
