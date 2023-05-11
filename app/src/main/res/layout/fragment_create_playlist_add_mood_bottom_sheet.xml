@@ -15,8 +15,7 @@
         android:paddingHorizontal="20dp"
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
-        android:textAppearance="@style/BoldTextAppearance"
-        android:textColor="?colorPrimary" />
+        android:textAppearance="@style/BoldTextAppearance" />
 
     <ImageButton
         android:id="@+id/add_button"

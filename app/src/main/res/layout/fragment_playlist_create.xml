@@ -147,7 +147,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:src="@drawable/ic_moods_filled"
                 android:text="@string/create_playlist_mood_button"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 app:strokeColor="?colorPrimary"
                 android:visibility="gone"
                 android:clipToPadding="false" />

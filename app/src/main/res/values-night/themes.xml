@@ -76,8 +76,7 @@
     </style>
 
     <style name="AppModalStyle"
-        parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_dialog</item>
+        parent="Widget.Material3.BottomSheet.Modal">
     </style>
 
     <style name="MaterialAlertDialog_rounded" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
