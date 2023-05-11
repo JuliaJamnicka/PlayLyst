@@ -3,13 +3,12 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.authentication
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.spotify.sdk.android.auth.AuthorizationClient
@@ -20,8 +19,6 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.SessionManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSpotifyAuthorizationBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.BuildConfig
-import cz.muni.fi.pv239.juliajamnicka.playlyst.R
-
 
 class SpotifyAuthorizationFragment : Fragment() {
     private lateinit var binding: FragmentSpotifyAuthorizationBinding
@@ -39,7 +36,7 @@ class SpotifyAuthorizationFragment : Fragment() {
                 SessionManager.getAccessToken(
                     success = {},
                     fail = {
-                        Toast.makeText(context, "imma die of sadness", Toast.LENGTH_SHORT).show()})
+                        Toast.makeText(context, "authorization error", Toast.LENGTH_SHORT).show()})
             }
             findNavController().navigate(SpotifyAuthorizationFragmentDirections
                 .actionSpotifyAuthorizationFragmentToPlaylistsFragment())
@@ -49,13 +46,10 @@ class SpotifyAuthorizationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentSpotifyAuthorizationBinding.inflate(layoutInflater, container, false)
 
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
         val mainActivity = requireActivity() as MainActivity
         mainActivity.setBottomNavigationVisibility(View.GONE)
         mainActivity.supportActionBar?.hide()
-
-        val color = ContextCompat.getColor(requireContext(), R.color.purple_500)
-        mainActivity.window.statusBarColor = color
-        mainActivity.window.navigationBarColor = color
 
         return binding.root
     }
@@ -91,15 +85,8 @@ class SpotifyAuthorizationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(android.R.attr.colorBackground, typedValue, true)
-        val color = typedValue.data
-
-        val mainActivity = requireActivity() as MainActivity
-
-        mainActivity.window.statusBarColor = color
-        mainActivity.window.navigationBarColor = color
-
-        mainActivity.supportActionBar?.show()
+        (requireActivity() as MainActivity).supportActionBar?.show()
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
     }
+
 }
