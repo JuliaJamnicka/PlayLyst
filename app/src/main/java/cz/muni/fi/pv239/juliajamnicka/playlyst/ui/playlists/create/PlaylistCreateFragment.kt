@@ -285,6 +285,7 @@ class PlaylistCreateFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (requireActivity() as MainActivity).setBottomNavigationVisibility(View.GONE)
         refreshSearch()
     }
 
