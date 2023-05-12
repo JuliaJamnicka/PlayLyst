@@ -44,6 +44,10 @@ class PlaylistsFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
 
+        if (playlistRepository.getAllPlaylists().isEmpty()) {
+            binding.empty.visibility = View.VISIBLE
+        }
+
         binding.createButton.setOnClickListener {
             findNavController().
                 navigate(PlaylistsFragmentDirections.actionPlaylistsFragmentToPlaylistCreateFragment())

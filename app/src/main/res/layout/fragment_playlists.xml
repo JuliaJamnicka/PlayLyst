@@ -6,6 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.playlists.PlaylistsFragment">
 
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_playlists"
+        style="@style/CircularTextAppearance"
+        android:textSize="16sp"
+        android:alpha="0.3"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

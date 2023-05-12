@@ -22,6 +22,8 @@
     <string name="invalid_color_input">Not a valid hex code</string>
     <string name="empty_field">Field cannot be empty</string>
 
+    <string name="empty_playlists">There are no playlists <i>yet</i>. Try to create one now!</string>
+
     <string name="create_playlist_choose_songs">Search songs</string>
     <string name="create_playlist_description">Choose up to 5 seeds (song and genres) to generate a playlist from.</string>
     <string name="create_playlist_include_songs">Include seeder songs in the playlist</string>
