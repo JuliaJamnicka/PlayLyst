@@ -178,8 +178,6 @@ class PlaylistCreateFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener {
-            binding.saveButton.isClickable = false
-
             fun createGenres() = binding.genresChipGroup.children
                 .map { it as Chip }
                 .filter { it.isChecked }
@@ -188,6 +186,7 @@ class PlaylistCreateFragment : Fragment() {
             val genres = createGenres()
 
             if (areSeedsValid(genres)) {
+                binding.saveButton.isClickable = false
                 generateSongs(genres)
             } else {
                 Toast.makeText(requireContext(),

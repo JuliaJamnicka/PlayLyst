@@ -117,8 +117,9 @@ class SavePlaylistFragment : Fragment() {
         })
 
         binding.saveButton.setOnClickListener {
-            binding.saveButton.isClickable = false
             if (isNameValid()) {
+                binding.saveButton.isClickable = false
+
                 spotifyRepository.uploadPlaylist(
                     name = binding.nameEditText.text.toString(),
                     songs = chosenSongs,
