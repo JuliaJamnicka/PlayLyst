@@ -32,6 +32,16 @@ class SearchSongViewHolder(
     private val binding: ItemPlaylistSongBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Song, onAddItemClick: (Song) -> Unit, onRemoveItemClick: (Song) -> Unit) {
+        fun changeSongSelection() {
+            if (!binding.addButton.isSelected) {
+                onAddItemClick(item)
+                binding.addButton.isSelected = true
+            } else {
+                onRemoveItemClick(item)
+                binding.addButton.isSelected = false
+            }
+        }
+
         binding.songCover.load(item.imageLink) {
             error(R.drawable.blank_song_cover)
         }
@@ -41,15 +51,12 @@ class SearchSongViewHolder(
         binding.addButton.isSelected = false
         binding.addButton.visibility = View.VISIBLE
 
-        // TODO: the actual add icon is not listening, fix
+        binding.addButton.setOnClickListener {
+            changeSongSelection()
+        }
+
         binding.root.setOnClickListener {
-            if (!binding.addButton.isSelected) {
-                onAddItemClick(item)
-                binding.addButton.isSelected = true
-            } else {
-                onRemoveItemClick(item)
-                binding.addButton.isSelected = false
-            }
+            changeSongSelection()
         }
     }
 }
