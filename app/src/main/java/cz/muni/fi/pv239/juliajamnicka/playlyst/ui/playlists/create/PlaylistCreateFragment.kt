@@ -30,6 +30,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentPlaylistCreateBinding
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 
+private const val MAX_SEED_COUNT = 5
 
 class PlaylistCreateFragment : Fragment() {
     private lateinit var binding: FragmentPlaylistCreateBinding
@@ -177,7 +178,19 @@ class PlaylistCreateFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener {
-            generateSongs()
+            fun createGenres() = binding.genresChipGroup.children
+                .map { it as Chip }
+                .filter { it.isChecked }
+                .map { it.text.toString() }
+                .toList()
+            val genres = createGenres()
+
+            if (areSeedsValid(genres)) {
+                generateSongs(genres)
+            } else {
+                Toast.makeText(requireContext(),
+                    "Number of seeds needs to be between 1 and 5.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -235,17 +248,11 @@ class PlaylistCreateFragment : Fragment() {
        }
     }
 
-    private fun generateSongs() {
-        fun createGenres() = binding.genresChipGroup.children
-            .map { it as Chip }
-            .filter { it.isChecked }
-            .map { it.text.toString() }
-            .toList()
-
+    private fun generateSongs(genres: List<String>) {
         // TODO: add getting of more results
         spotifyRepository.getRecommendations(
             songs = chosenSongs,
-            genres = createGenres(),
+            genres = genres,
             attributes = chosenAttributes,
             success = { (_, songs) ->
                 val finalSongs = if (binding.includeSwitch.isChecked)
@@ -300,5 +307,11 @@ class PlaylistCreateFragment : Fragment() {
             activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             else -> false
         }
+    }
+
+    private fun areSeedsValid(genres: List<String>): Boolean {
+        val seedCount = chosenSongs.size + genres.size
+
+        return seedCount in 1..MAX_SEED_COUNT
     }
 }

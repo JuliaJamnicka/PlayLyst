@@ -137,4 +137,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!-- TODO: change the toasties -->
+    <style name="CircularToastStyle" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/circular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
