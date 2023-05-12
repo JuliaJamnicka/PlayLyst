@@ -117,6 +117,7 @@ class SavePlaylistFragment : Fragment() {
         })
 
         binding.saveButton.setOnClickListener {
+            binding.saveButton.isClickable = false
             if (isNameValid()) {
                 spotifyRepository.uploadPlaylist(
                     name = binding.nameEditText.text.toString(),
@@ -128,6 +129,7 @@ class SavePlaylistFragment : Fragment() {
                     },
                     fail = {
                         Toast.makeText(context, "Error uploading playlist", Toast.LENGTH_SHORT).show()
+                        binding.saveButton.isClickable = true
                     }
                 )
             }

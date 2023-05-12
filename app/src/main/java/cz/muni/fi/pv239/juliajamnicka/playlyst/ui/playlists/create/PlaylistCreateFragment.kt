@@ -178,6 +178,8 @@ class PlaylistCreateFragment : Fragment() {
 
 
         binding.saveButton.setOnClickListener {
+            binding.saveButton.isClickable = false
+
             fun createGenres() = binding.genresChipGroup.children
                 .map { it as Chip }
                 .filter { it.isChecked }
@@ -263,6 +265,7 @@ class PlaylistCreateFragment : Fragment() {
             fail = {
                 Toast.makeText(context,
                     "Error generating songs", Toast.LENGTH_SHORT).show()
+                binding.saveButton.isClickable = true
             }
         )
     }
