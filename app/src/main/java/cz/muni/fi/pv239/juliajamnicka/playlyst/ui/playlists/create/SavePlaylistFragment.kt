@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -101,20 +103,34 @@ class SavePlaylistFragment : Fragment() {
 
         refreshSongs()
 
-        binding.saveButton.setOnClickListener {
+        binding.nameEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            spotifyRepository.uploadPlaylist(
-                name = binding.nameEditText.text.toString(),
-                songs = chosenSongs,
-                playlistImage = playlistImage,
-                success = { playlist ->
-                    playlistRepository.saveOrUpdate(playlist)
-                    findNavController().popBackStack(R.id.playlistsFragment, false)
-                },
-                fail = {
-                    Toast.makeText(context, "Error uploading playlist", Toast.LENGTH_SHORT).show()
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0?.isEmpty() == false) {
+                    binding.nameInput.error = null
                 }
-            )
+            }
+
+        })
+
+        binding.saveButton.setOnClickListener {
+            if (isNameValid()) {
+                spotifyRepository.uploadPlaylist(
+                    name = binding.nameEditText.text.toString(),
+                    songs = chosenSongs,
+                    playlistImage = playlistImage,
+                    success = { playlist ->
+                        playlistRepository.saveOrUpdate(playlist)
+                        findNavController().popBackStack(R.id.playlistsFragment, false)
+                    },
+                    fail = {
+                        Toast.makeText(context, "Error uploading playlist", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
         }
     }
 
@@ -146,6 +162,14 @@ class SavePlaylistFragment : Fragment() {
         super.onDestroyView()
         val mainActivity = requireActivity() as MainActivity
         mainActivity.setBottomNavigationVisibility(View.VISIBLE)
+    }
+
+    private fun isNameValid(): Boolean {
+        val name = binding.nameEditText.text.toString()
+        if (name.isEmpty()) {
+            binding.nameInput.error = getString(R.string.empty_field)
+        }
+        return name.isNotEmpty()
     }
 
 }
