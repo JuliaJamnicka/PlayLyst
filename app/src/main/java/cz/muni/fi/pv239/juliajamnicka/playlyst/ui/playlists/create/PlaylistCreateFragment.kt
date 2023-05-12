@@ -110,7 +110,6 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.adapter = chosenAdapter
         binding.chosenRecyclerView.visibility = View.VISIBLE
 
-        showNoSearchScreen(false)
 
         setUpSearchStyle()
 
