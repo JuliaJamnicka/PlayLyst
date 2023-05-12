@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.slider.RangeSlider
-import com.google.android.material.slider.Slider
-import com.google.android.material.slider.Slider.OnSliderTouchListener
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttribute
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttributeType
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemMoodAttributeBinding
@@ -58,11 +56,15 @@ class MoodAttributeViewHolder(
         // TODO: make these range sliders
         binding.slider.valueFrom = item.minValue.toFloat()
         binding.slider.valueTo = item.maxValue.toFloat()
-        binding.slider.stepSize = item.stepSize.toFloat()
+       if (item.isDiscrete) {
+           binding.slider.stepSize = item.stepSize.toFloat()
+       } else {
+           binding.slider.stepSize = 0.0f
+       }
 
-        binding.slider.value = if (item.value === null)
-            (item.defaultValue ?: 0.0).toFloat() else
-            (item.value ?: 0.0).toFloat()
+        val lowerValue = item.lowerValue?.toFloat() ?: item.lowerDefaultValue.toFloat()
+        val upperValue = item.upperValue?.toFloat() ?: item.upperDefaultValue.toFloat()
+        binding.slider.values = listOf(lowerValue, upperValue)
 
         sliderTouchListener.initialize(onSliderChange, item)
         binding.slider.addOnSliderTouchListener(sliderTouchListener)
@@ -80,7 +82,7 @@ class MoodAttributeDiffUtil : DiffUtil.ItemCallback<MoodAttribute>() {
         oldItem == newItem
 }
 
-class OnSliderLetGoListener() : OnSliderTouchListener {
+class OnSliderLetGoListener : RangeSlider.OnSliderTouchListener {
 
     private lateinit var onSliderChange: (MoodAttribute) -> Unit
     private lateinit var item: MoodAttribute
@@ -90,11 +92,11 @@ class OnSliderLetGoListener() : OnSliderTouchListener {
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onStartTrackingTouch(slider: Slider) {}
+    override fun onStartTrackingTouch(slider: RangeSlider) {}
 
     @SuppressLint("RestrictedApi")
-    override fun onStopTrackingTouch(slider: Slider) {
-        val value = slider.value
-        onSliderChange(item.copyNewWithChangedValues(value))
+    override fun onStopTrackingTouch(slider: RangeSlider) {
+        val values = slider.values
+        onSliderChange(item.copyNewWithChangedValues(values))
     }
 }

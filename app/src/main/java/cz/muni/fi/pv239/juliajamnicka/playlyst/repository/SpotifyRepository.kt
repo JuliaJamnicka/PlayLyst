@@ -111,7 +111,7 @@ class SpotifyRepository(
                     if (value == null) {
                         continue
                     }
-                    queries[attrName] = if (attribute.canHaveRange)
+                    queries[attrName] = if (attribute.isFloat)
                         value.toFloat()
                     else value.toInt()
                 }

@@ -4,10 +4,11 @@ data class AttributeThresholds(
     val maxValue: Double,
     val stepSize: Double,
     // change canHaveRange (since actually all of them can) to diff of int and float
-    val canHaveRange: Boolean,
+    val isFloat: Boolean,
+    val isDiscrete: Boolean,
     val defaultValue: Double? = null,
-    val lowerDefaultValue: Double? = null,
-    val upperDefaultValue: Double? = null,
+    val lowerDefaultValue: Double,
+    val upperDefaultValue: Double,
 )
 
 enum class MoodAttributeType {
@@ -32,21 +33,28 @@ enum class MoodAttributeType {
             minValue = -1.0,
             maxValue = 11.0,
             stepSize = 1.0,
-            canHaveRange = false,
-            defaultValue = 5.0
+            isFloat = false,
+            isDiscrete = true,
+            defaultValue = 5.0,
+            lowerDefaultValue = -1.0,
+            upperDefaultValue = 11.0
         )
         MODE -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 1.0,
-            canHaveRange = false,
-            defaultValue = 1.0
+            isFloat = false,
+            isDiscrete = true,
+            defaultValue = 1.0,
+            lowerDefaultValue = 0.0,
+            upperDefaultValue = 1.0
         )
         ACOUSTICNESS -> AttributeThresholds(
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
@@ -55,7 +63,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
@@ -64,7 +73,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
@@ -73,7 +83,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
@@ -82,7 +93,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
@@ -91,7 +103,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 300.0,
             stepSize = 10.0,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 100.0,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 300.0
@@ -100,7 +113,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 100.0,
             stepSize = 5.0,
-            canHaveRange = false,
+            isFloat = false,
+            isDiscrete = false,
             defaultValue = 70.0,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 100.0
@@ -109,7 +123,8 @@ enum class MoodAttributeType {
             minValue = 0.0,
             maxValue = 1.0,
             stepSize = 0.05,
-            canHaveRange = true,
+            isFloat = true,
+            isDiscrete = false,
             defaultValue = 0.5,
             lowerDefaultValue = 0.0,
             upperDefaultValue = 1.0
