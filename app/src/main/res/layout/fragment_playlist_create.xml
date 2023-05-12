@@ -175,7 +175,7 @@
         android:layout_gravity="bottom|center"
         android:visibility="gone" />
 
-
+    <!-- TODO: hide the content behind the button, but how? fadingEdge is only both top and bottom -->
     <Button
         android:id="@+id/save_button"
         android:layout_width="match_parent"
