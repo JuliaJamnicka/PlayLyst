@@ -11,7 +11,6 @@ data class MoodAttribute(
     val minValue: Double,
     val maxValue: Double,
     val stepSize: Double,
-    val isFloat: Boolean,
     val isDiscrete: Boolean,
     val defaultValue: Double? = null,
     val lowerDefaultValue: Double,
@@ -20,7 +19,7 @@ data class MoodAttribute(
     var lowerValue : Double? = null,
     var upperValue: Double? = null,
 ) : Parcelable {
-    fun copyNewWithChangedValues(values: List<Float>)
+    fun copyNewWithChangedValues(newValue: Float)
     : MoodAttribute {
         return MoodAttribute(
             id = id,
@@ -29,14 +28,13 @@ data class MoodAttribute(
             minValue = minValue,
             maxValue = maxValue,
             stepSize = stepSize,
-            isFloat = isFloat,
             isDiscrete = isDiscrete,
             defaultValue = defaultValue,
             lowerDefaultValue = lowerDefaultValue,
             upperDefaultValue = upperDefaultValue,
-            value = value,
-            lowerValue = values[0].toDouble(),
-            upperValue = values[1].toDouble()
+            value = newValue.toDouble(),
+            lowerValue = lowerValue,
+            upperValue = upperValue,
         )
     }
 }

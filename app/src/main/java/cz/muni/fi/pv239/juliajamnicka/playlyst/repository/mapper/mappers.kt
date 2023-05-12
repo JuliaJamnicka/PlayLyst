@@ -103,7 +103,6 @@ fun MoodAttributeEntity.toAppData(): MoodAttribute {
         minValue = thresholds.minValue,
         maxValue = thresholds.maxValue,
         stepSize = thresholds.stepSize,
-        isFloat = thresholds.isFloat,
         isDiscrete = thresholds.isDiscrete,
         lowerDefaultValue = thresholds.lowerDefaultValue,
         upperDefaultValue = thresholds.upperDefaultValue,

@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.slider.RangeSlider
+import com.google.android.material.slider.Slider
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttribute
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.MoodAttributeType
 import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemMoodAttributeBinding
@@ -46,14 +45,9 @@ class MoodAttributeViewHolder(
 
         // TODO: fix disappearing on slider change, why?
         binding.infoButton.setOnClickListener {
-            binding.description.visibility = if (binding.description.isVisible)
-                View.GONE else
-                    View.VISIBLE
-
-            binding.infoButton.isSelected = binding.description.isVisible
+            binding.description.visibility = View.VISIBLE
         }
 
-        // TODO: make these range sliders
         binding.slider.valueFrom = item.minValue.toFloat()
         binding.slider.valueTo = item.maxValue.toFloat()
        if (item.isDiscrete) {
@@ -62,9 +56,9 @@ class MoodAttributeViewHolder(
            binding.slider.stepSize = 0.0f
        }
 
-        val lowerValue = item.lowerValue?.toFloat() ?: item.lowerDefaultValue.toFloat()
-        val upperValue = item.upperValue?.toFloat() ?: item.upperDefaultValue.toFloat()
-        binding.slider.values = listOf(lowerValue, upperValue)
+        binding.slider.value = if (item.value === null)
+            (item.defaultValue ?: 0.0).toFloat() else
+            (item.value ?: 0.0).toFloat()
 
         sliderTouchListener.initialize(onSliderChange, item)
         binding.slider.addOnSliderTouchListener(sliderTouchListener)
@@ -82,7 +76,7 @@ class MoodAttributeDiffUtil : DiffUtil.ItemCallback<MoodAttribute>() {
         oldItem == newItem
 }
 
-class OnSliderLetGoListener : RangeSlider.OnSliderTouchListener {
+class OnSliderLetGoListener : Slider.OnSliderTouchListener {
 
     private lateinit var onSliderChange: (MoodAttribute) -> Unit
     private lateinit var item: MoodAttribute
@@ -92,11 +86,11 @@ class OnSliderLetGoListener : RangeSlider.OnSliderTouchListener {
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onStartTrackingTouch(slider: RangeSlider) {}
+    override fun onStartTrackingTouch(slider: Slider) {}
 
     @SuppressLint("RestrictedApi")
-    override fun onStopTrackingTouch(slider: RangeSlider) {
-        val values = slider.values
-        onSliderChange(item.copyNewWithChangedValues(values))
+    override fun onStopTrackingTouch(slider: Slider) {
+        val value = slider.value
+        onSliderChange(item.copyNewWithChangedValues(value))
     }
 }

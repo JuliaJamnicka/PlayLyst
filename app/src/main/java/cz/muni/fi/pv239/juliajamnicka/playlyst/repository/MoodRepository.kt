@@ -30,7 +30,6 @@ class MoodRepository(
                 minValue = attribute.minValue,
                 maxValue = attribute.maxValue,
                 stepSize = attribute.stepSize,
-                isFloat = attribute.isFloat,
                 isDiscrete = attribute.isDiscrete,
                 defaultValue = attribute.defaultValue,
                 lowerDefaultValue = attribute.lowerDefaultValue,

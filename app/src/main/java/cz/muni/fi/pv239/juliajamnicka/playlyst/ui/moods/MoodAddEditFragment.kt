@@ -143,7 +143,6 @@ class MoodAddEditFragment : Fragment() {
                 minValue = thresholds.minValue,
                 maxValue = thresholds.maxValue,
                 stepSize = thresholds.stepSize,
-                isFloat = thresholds.isFloat,
                 isDiscrete = thresholds.isDiscrete,
                 defaultValue = thresholds.defaultValue,
                 lowerDefaultValue = thresholds.lowerDefaultValue,

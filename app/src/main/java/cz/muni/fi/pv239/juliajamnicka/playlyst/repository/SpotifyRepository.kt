@@ -111,9 +111,9 @@ class SpotifyRepository(
                     if (value == null) {
                         continue
                     }
-                    queries[attrName] = if (attribute.isFloat)
-                        value.toFloat()
-                    else value.toInt()
+                    queries[attrName] = if (attribute.isDiscrete)
+                        value.toInt()
+                    else value.toFloat()
                 }
             }
 
