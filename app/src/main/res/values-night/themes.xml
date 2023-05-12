@@ -63,6 +63,7 @@
 
     <style name="TextInputLayoutMine" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="hintTextAppearance">@style/CircularTextAppearance</item>
+        <item name="errorTextAppearance">@style/CircularTextAppearance</item>
         <item name="placeholderTextAppearance">@style/PlaceholerTextAppearance</item>
         <item name="helperTextTextAppearance">@style/CircularTextAppearance</item>
         <item name="prefixTextAppearance">@style/PlaceholerTextAppearance</item>

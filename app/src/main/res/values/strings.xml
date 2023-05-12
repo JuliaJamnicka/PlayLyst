@@ -19,6 +19,8 @@
     <string name="create_mood_title">Create mood</string>
     <string name="edit_playlist_title">Edit playlist</string>
     <string name="edit_mood_title">Edit mood</string>
+    <string name="invalid_color_input">Not a valid hex code</string>
+    <string name="empty_field">Field cannot be empty</string>
 
     <string name="create_playlist_choose_songs">Choose seeder songs</string>
     <string name="create_playlist_chosen_songs">Starter songs</string>

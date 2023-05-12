@@ -3,6 +3,8 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.moods
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -65,17 +67,33 @@ class MoodAddEditFragment : Fragment() {
 
         setInitialValues()
 
-        // TODO: add checks
+        binding.nameEditText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (p0?.isEmpty() == false) {
+                    binding.nameInput.error = null
+                }
+            }
+
+        })
+
         binding.colorEditText.setOnFocusChangeListener { _, hasFocus ->
-            val text = binding.colorEditText.text
-            if (!hasFocus && text?.isNotEmpty() == true) {
+            val color = "#${binding.colorEditText.text}"
+
+            if (!hasFocus && isColorValid(color)) {
+                binding.colorInput.error = null
                 binding.colorWheel.imageTintList =
-                    ColorStateList.valueOf(Color.parseColor("#$text"))
+                    ColorStateList.valueOf(Color.parseColor(color))
             }
         }
 
         binding.colorWheel.setOnClickListener {
             val hexColor = RandomColorUtil.getRandomHexColor()
+
+            binding.colorInput.error = null
 
             binding.colorEditText.setText(hexColor)
             binding.colorWheel.imageTintList =
@@ -86,12 +104,14 @@ class MoodAddEditFragment : Fragment() {
             val name = binding.nameEditText.text.toString()
             val color = "#${binding.colorEditText.text.toString()}"
 
-            val mood = moodRepository.saveOrUpdate(name, color, getSortedAttributes(),
-                args.mood?.id)
+            if (isMoodValid(name, color)) {
+                val mood = moodRepository.saveOrUpdate(name, color, getSortedAttributes(),
+                    args.mood?.id)
 
-            val navController = findNavController()
-            navController.previousBackStackEntry?.savedStateHandle?.set("mood", mood)
-            findNavController().popBackStack()
+                val navController = findNavController()
+                navController.previousBackStackEntry?.savedStateHandle?.set("mood", mood)
+                findNavController().popBackStack()
+            }
         }
 
     }
@@ -130,6 +150,25 @@ class MoodAddEditFragment : Fragment() {
                 value = thresholds.defaultValue
             )
         }
+    }
+
+    private fun isMoodValid(name: String, hexColor: String): Boolean {
+        if (name.isEmpty()) {
+            binding.nameInput.error = getString(R.string.empty_field)
+            return false
+        }
+        return isColorValid(hexColor)
+    }
+
+    private fun isColorValid(hexColor: String): Boolean
+    {
+        try {
+            Color.parseColor(hexColor)
+        } catch (_: java.lang.IllegalArgumentException) {
+            binding.colorInput.error = getString(R.string.invalid_color_input)
+            return false
+        }
+        return true
     }
 
     private fun refreshList() {
