@@ -13,7 +13,9 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.ItemPlaylistSongBindi
 
 class ChosenSongsAdapter(
     private val onItemClick: (Song) -> Unit,
+    private val onPlayClick: (Song) -> Unit,
 ) : ListAdapter<Song, ChosenSongViewHolder>(ChosenSongDiffUtil()) {
+    var selectedPosition = RecyclerView.NO_POSITION
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChosenSongViewHolder =
         ChosenSongViewHolder(
             ItemPlaylistSongBinding
@@ -22,7 +24,27 @@ class ChosenSongsAdapter(
 
     override fun onBindViewHolder(holder: ChosenSongViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onItemClick)
+        holder.bind(item, onItemClick, onPlayClick)
+
+        if (position == selectedPosition) {
+            holder.itemView.setBackgroundResource(R.drawable.selected_song_background)
+        } else {
+            holder.itemView.setBackgroundResource(0)
+        }
+
+        holder.itemView.setOnClickListener {
+            val previousSelectedPosition = selectedPosition
+            onPlayClick(item)
+
+            selectedPosition = if (previousSelectedPosition == position) {
+                RecyclerView.NO_POSITION
+            } else {
+                position
+            }
+
+            notifyItemChanged(previousSelectedPosition)
+            notifyItemChanged(selectedPosition)
+        }
     }
 
 }
@@ -31,7 +53,7 @@ class ChosenSongsAdapter(
 class ChosenSongViewHolder(
     private val binding: ItemPlaylistSongBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Song, onItemClick: (Song) -> Unit) {
+    fun bind(item: Song, onItemClick: (Song) -> Unit, onPlayClick: (Song) -> Unit) {
         binding.songCover.load(item.imageLink) {
             error(R.drawable.blank_song_cover)
         }

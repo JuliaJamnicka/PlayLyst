@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
@@ -50,9 +51,35 @@ class SavePlaylistFragment : Fragment() {
     private val adapter: ChosenSongsAdapter by lazy {
         ChosenSongsAdapter(
             onItemClick = { song ->
-                    chosenSongs.remove(song)
-                    Log.e(song.name, "was deleted")
-                    refreshSongs()
+                val position = chosenSongs.indexOf(song)
+                chosenSongs.remove(song)
+
+                adapter.apply {
+                    if (position == selectedPosition) {
+                        selectedPosition = RecyclerView.NO_POSITION
+                        spotifyRepository.pauseSong(success = {}, fail = {
+                            Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
+                        })
+                    } else if (position < selectedPosition) {
+                        selectedPosition--
+                    }
+                }
+
+                Log.e(song.name, "was deleted")
+                refreshSongs()
+            },
+            onPlayClick = { song ->
+                val position = chosenSongs.indexOf(song)
+
+                if (position == adapter.selectedPosition) {
+                    spotifyRepository.pauseSong(success = {}, fail = {
+                        Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
+                    })
+                } else {
+                    spotifyRepository.playSong(song, success = {}, fail = {
+                        Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
+                    })
+                }
             }
         )
     }

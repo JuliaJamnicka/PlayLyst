@@ -2,6 +2,7 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.api.services
 
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.UpdateSongsBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.PlayBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
 import okhttp3.RequestBody
@@ -74,4 +75,21 @@ interface SpotifyWebApiService {
         @Header("Authorization") token: String,
         @Path("playlist_id") playlistId: String
     ) : Call<Void>
+
+    @GET("me/player/devices")
+    fun getAvailableDevices(
+        @Header("Authorization") token: String,
+    ): Call<AvailableDevicesResponse>
+
+    @PUT("me/player/play")
+    fun playSong(
+        @Header("Authorization") token: String,
+        @Query("device_id") deviceId: String,
+        @Body body: PlayBody
+    ): Call<Void>
+
+    @PUT("me/player/pause")
+    fun pauseSong(
+        @Header("Authorization") token: String,
+    ): Call<Void>
 }
