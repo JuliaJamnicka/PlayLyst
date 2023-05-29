@@ -6,6 +6,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.api.RetrofitUtil
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.SessionManager
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.UpdateSongsBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.NewPlaylistBody
+import cz.muni.fi.pv239.juliajamnicka.playlyst.api.query.PlayBody
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.*
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Image
 import cz.muni.fi.pv239.juliajamnicka.playlyst.api.response.data.Track
@@ -349,6 +350,83 @@ class SpotifyRepository(
             }
 
             override fun onFailure(call: Call<UpdatePlaylistItemsResponse>, t: Throwable) {
+                Log.e(this::class.simpleName, t.message, t)
+                fail()
+            }
+        })
+    }
+
+    fun selectDevice(success: (String) -> Unit, fail: () -> Unit) {
+        spotifyWebApiService.getAvailableDevices(
+            token = "Bearer ${SessionManager.getToken("access_token")}",
+        ).enqueue(object: Callback<AvailableDevicesResponse> {
+            override fun onResponse(call: Call<AvailableDevicesResponse>,
+                                    response: Response<AvailableDevicesResponse>) {
+                val responseBody = response.body()
+                if (response.isSuccessful && responseBody != null) {
+                    val activeDevice = responseBody.devices.find { it.is_active }
+                    if (activeDevice != null) {
+                        success(activeDevice.id)
+                    }
+
+                    val nonRestrictedDevice = responseBody.devices.find { !it.is_restricted }
+                    if (nonRestrictedDevice != null) {
+                        success(nonRestrictedDevice.id)
+                    }
+                    fail()
+                } else {
+                    Log.e(this::class.simpleName, "song could not play")
+                    fail()
+                }
+            }
+
+            override fun onFailure(call: Call<AvailableDevicesResponse>, t: Throwable) {
+                Log.e(this::class.simpleName, t.message, t)
+                fail()
+            }
+        })
+    }
+
+    fun playSong(song: Song, success: () -> Unit, fail: () -> Unit) {
+        selectDevice(success = { id ->
+            spotifyWebApiService.playSong(
+                token = "Bearer ${SessionManager.getToken("access_token")}",
+                deviceId = id,
+                body = PlayBody(
+                    uris = listOf(song.uri)
+                )
+            ).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        success()
+                    } else {
+                        Log.e(this::class.simpleName, "song could not play")
+                        fail()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e(this::class.simpleName, t.message, t)
+                    fail()
+                }
+            })
+        }, fail = {})
+    }
+
+    fun pauseSong(success: () -> Unit, fail: () -> Unit) {
+        spotifyWebApiService.pauseSong(
+            token = "Bearer ${SessionManager.getToken("access_token")}"
+        ).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    success()
+                } else {
+                    Log.e(this::class.simpleName, "could not stop playback")
+                    fail()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.e(this::class.simpleName, t.message, t)
                 fail()
             }

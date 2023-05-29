@@ -57,7 +57,8 @@ class PlaylistCreateFragment : Fragment() {
                 chosenSongs.remove(song)
                 Log.e(song.name, "was deleted")
                 refreshChosen()
-            }
+            },
+            onPlayClick = {}
         )
     }
 
