@@ -1,5 +1,7 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +26,7 @@ class ChosenSongsAdapter(
 
     override fun onBindViewHolder(holder: ChosenSongViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onItemClick, onPlayClick)
+        holder.bind(item, onItemClick, onPlayClick, position == selectedPosition)
 
         if (position == selectedPosition) {
             holder.itemView.setBackgroundResource(R.drawable.selected_song_background)
@@ -53,7 +55,7 @@ class ChosenSongsAdapter(
 class ChosenSongViewHolder(
     private val binding: ItemPlaylistSongBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: Song, onItemClick: (Song) -> Unit, onPlayClick: (Song) -> Unit) {
+    fun bind(item: Song, onItemClick: (Song) -> Unit, onPlayClick: (Song) -> Unit, isSelected: Boolean) {
         binding.songCover.load(item.imageLink) {
             error(R.drawable.blank_song_cover)
         }
@@ -63,6 +65,9 @@ class ChosenSongViewHolder(
         binding.addButton.setImageResource(R.drawable.ic_remove)
         binding.addButton.isSelected = true
         binding.addButton.visibility = View.VISIBLE
+        if (isSelected) {
+            binding.addButton.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        }
 
         binding.addButton.setOnClickListener {
             onItemClick(item)
