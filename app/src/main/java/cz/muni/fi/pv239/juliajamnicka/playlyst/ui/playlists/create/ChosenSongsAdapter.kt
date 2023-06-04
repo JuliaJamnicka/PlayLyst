@@ -1,10 +1,12 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlists.create
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +23,8 @@ class ChosenSongsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChosenSongViewHolder =
         ChosenSongViewHolder(
             ItemPlaylistSongBinding
-                .inflate(LayoutInflater.from(parent.context), parent, false)
+                .inflate(LayoutInflater.from(parent.context), parent, false),
+            parent.context
         )
 
     override fun onBindViewHolder(holder: ChosenSongViewHolder, position: Int) {
@@ -53,7 +56,8 @@ class ChosenSongsAdapter(
 
 
 class ChosenSongViewHolder(
-    private val binding: ItemPlaylistSongBinding
+    private val binding: ItemPlaylistSongBinding,
+    private val context: Context
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Song, onItemClick: (Song) -> Unit, onPlayClick: (Song) -> Unit, isSelected: Boolean) {
         binding.songCover.load(item.imageLink) {
@@ -67,6 +71,8 @@ class ChosenSongViewHolder(
         binding.addButton.visibility = View.VISIBLE
         if (isSelected) {
             binding.addButton.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        } else {
+            binding.addButton.imageTintList = ContextCompat.getColorStateList(context, R.color.purple_500)
         }
 
         binding.addButton.setOnClickListener {
