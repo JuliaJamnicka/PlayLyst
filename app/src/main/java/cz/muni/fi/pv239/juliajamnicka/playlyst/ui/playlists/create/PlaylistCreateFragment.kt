@@ -81,6 +81,7 @@ class PlaylistCreateFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("DiscouragedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -115,13 +116,19 @@ class PlaylistCreateFragment : Fragment() {
 
         setUpSearchStyle()
 
+        val closeButtonId = requireContext().resources.getIdentifier("android:id/search_close_btn", null, null)
+        val closeButton = binding.search.findViewById<ImageView>(closeButtonId)
+
+        closeButton.setOnClickListener {
+            binding.search.setQuery("", false)
+            hideSearch()
+        }
+
         binding.search.setOnCloseListener {
             binding.chosenRecyclerView.visibility = View.VISIBLE
             binding.saveButton.visibility = View.VISIBLE
 
-            if (chosenSongs.isNotEmpty()) {
-                showNoSearchScreen(true)
-            }
+            hideSearch()
             false
         }
 
@@ -129,32 +136,34 @@ class PlaylistCreateFragment : Fragment() {
 
             // TODO: implement debounce and partial loading
             override fun onQueryTextChange(newText: String): Boolean {
-                hideSearch()
+                if (newText.isNotEmpty()) {
+                    binding.chosenRecyclerView.visibility = View.GONE
+                    showNoSearchScreen(false)
+                    binding.saveButton.visibility = View.GONE
+                    binding.searchDoneButton.visibility = View.VISIBLE
+
+                    spotifyRepository.getSearchResults(newText,
+                        success = { songs ->
+                            searchAdapter.submitList(songs)
+                            chosenAdapter.submitList(chosenSongs)
+                        },
+                        fail = {
+                            Toast.makeText(context,
+                                "Error getting search results", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
                 return false
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                binding.chosenRecyclerView.visibility = View.GONE
-                showNoSearchScreen(false)
-                binding.saveButton.visibility = View.GONE
-                binding.searchDoneButton.visibility = View.VISIBLE
-
-                spotifyRepository.getSearchResults(query,
-                    success = { songs ->
-                        searchAdapter.submitList(songs)
-                        chosenAdapter.submitList(chosenSongs)
-                    },
-                    fail = {
-                        Toast.makeText(context,
-                            "Error getting search results", Toast.LENGTH_SHORT).show()
-                    }
-                )
                 return false
             }
         })
 
         binding.searchDoneButton.setOnClickListener {
             hideSearch()
+            showNoSearchScreen(true)
             binding.scrollview.fullScroll(ScrollView.FOCUS_UP)
         }
 
@@ -211,8 +220,8 @@ class PlaylistCreateFragment : Fragment() {
         binding.chosenRecyclerView.visibility = View.VISIBLE
         binding.searchDoneButton.visibility = View.GONE
         binding.saveButton.visibility = View.VISIBLE
-        showNoSearchScreen(chosenSongs.isNotEmpty())
         searchAdapter.submitList(emptyList())
+        showNoSearchScreen(true)
     }
 
     private fun showGenres(genres: List<String>) {
