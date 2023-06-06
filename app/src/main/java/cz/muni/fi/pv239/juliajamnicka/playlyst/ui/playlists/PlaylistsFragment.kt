@@ -61,6 +61,7 @@ class PlaylistsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.recyclerView.scrollToPosition(0)
         refreshList()
     }
 }

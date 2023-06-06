@@ -75,7 +75,7 @@ class SpotifyAuthorizationFragment : Fragment() {
         builder.setScopes(arrayOf("streaming", "ugc-image-upload", "app-remote-control",
             "playlist-modify-private", "playlist-modify-public", "user-read-private",
             "user-read-email", "user-read-playback-state", "user-modify-playback-state"))
-        //builder.setShowDialog(true)
+        builder.setShowDialog(true)
         // setting a state is recommended, maybe add later?
         val request = builder.build()
 
