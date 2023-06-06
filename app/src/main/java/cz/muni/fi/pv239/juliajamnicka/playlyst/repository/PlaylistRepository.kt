@@ -3,7 +3,6 @@ package cz.muni.fi.pv239.juliajamnicka.playlyst.repository
 import android.content.Context
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Playlist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.PlaylistAndSong
-import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.SongAndArtist
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlayLystDatabase
 import cz.muni.fi.pv239.juliajamnicka.playlyst.database.PlaylistAndSongEntity
@@ -43,6 +42,7 @@ class PlaylistRepository(
     fun getAllPlaylists(): List<Playlist> =
         dao.getPlaylistsWithSongs()
             .map { it.toAppData() }
+            .reversed()
 
     fun deletePlaylist(playlist: Playlist) {
         for (song in playlist.songs) {
