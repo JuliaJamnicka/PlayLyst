@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +15,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -23,6 +29,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
@@ -30,6 +37,7 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSavePlaylistB
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.util.getResizedBitmap
+import okhttp3.internal.wait
 
 class SavePlaylistFragment : Fragment() {
 
@@ -147,16 +155,46 @@ class SavePlaylistFragment : Fragment() {
             if (isNameValid()) {
                 binding.saveButton.isClickable = false
 
+                val dialogView = LayoutInflater.from(requireContext())
+                    .inflate(R.layout.playlist_save_loading_dialog, null)
+
+                val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded).apply {
+                    setView(dialogView)
+                    setCancelable(false)
+                }.create()
+
+                dialog.show()
+
                 spotifyRepository.uploadPlaylist(
                     name = binding.nameEditText.text.toString(),
                     songs = chosenSongs,
                     playlistImage = playlistImage,
                     success = { playlist ->
                         playlistRepository.saveOrUpdate(playlist)
-                        findNavController().popBackStack(R.id.playlistsFragment, false)
+
+                        dialogView.findViewById<TextView>(R.id.loading_message).visibility = View.GONE
+                        dialogView.findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
+                        dialogView.findViewById<TextView>(R.id.success_message).visibility = View.VISIBLE
+                        dialogView.findViewById<ImageView>(R.id.success_image).visibility = View.VISIBLE
+
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                dialog.dismiss()
+                                findNavController().popBackStack(R.id.playlistsFragment, false)
+                            }
+                        , 1000)
                     },
                     fail = {
-                        Toast.makeText(context, "Error uploading playlist", Toast.LENGTH_SHORT).show()
+                        dialogView.findViewById<TextView>(R.id.loading_message).visibility = View.GONE
+                        dialogView.findViewById<ProgressBar>(R.id.loading_circle).visibility = View.GONE
+                        dialogView.findViewById<TextView>(R.id.fail_message).visibility = View.VISIBLE
+                        dialogView.findViewById<ImageView>(R.id.fail_image).visibility = View.VISIBLE
+
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            {
+                                dialog.dismiss()
+                            }
+                            , 2000)
                         binding.saveButton.isClickable = true
                     }
                 )

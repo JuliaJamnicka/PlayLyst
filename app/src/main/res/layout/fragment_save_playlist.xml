@@ -57,13 +57,13 @@
                     app:layout_constraintTop_toBottomOf="@id/upload_image_button"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:placeholderText="Interesting mood name">
+                    app:placeholderText="">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/circular_bold"
+                        android:fontFamily="@font/circular_black"
                         android:textSize="20sp"
                         android:inputType="text" />
 
