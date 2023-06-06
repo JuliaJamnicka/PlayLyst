@@ -1,10 +1,12 @@
 package cz.muni.fi.pv239.juliajamnicka.playlyst.ui.playlist
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -71,6 +73,17 @@ class SongsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.spotifyButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args.playlist!!.uri))
+            intent.setPackage("com.spotify.music") // Specify the package name of the Spotify app
+
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            } else {
+                // TODO: dialog saying that Spotify is not installed
+            }
+        }
+
         binding.deleteButton.setOnClickListener {
             val dialogView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.playlist_delete_alert_dialog, null)
@@ -125,6 +138,7 @@ class SongsFragment : Fragment() {
 
         binding.playlistName.setTextColor(color)
         binding.backButton.imageTintList = color
+        binding.spotifyButton.imageTintList = color
         binding.deleteButton.imageTintList = color
     }
 
