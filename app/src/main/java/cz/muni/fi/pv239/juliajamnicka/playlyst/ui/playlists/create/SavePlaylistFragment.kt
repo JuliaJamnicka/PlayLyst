@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -30,6 +29,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.spotify.android.appremote.api.ConnectionParams
+import com.spotify.android.appremote.api.Connector
 import cz.muni.fi.pv239.juliajamnicka.playlyst.MainActivity
 import cz.muni.fi.pv239.juliajamnicka.playlyst.R
 import cz.muni.fi.pv239.juliajamnicka.playlyst.data.Song
@@ -37,7 +38,8 @@ import cz.muni.fi.pv239.juliajamnicka.playlyst.databinding.FragmentSavePlaylistB
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.PlaylistRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.repository.SpotifyRepository
 import cz.muni.fi.pv239.juliajamnicka.playlyst.util.getResizedBitmap
-import okhttp3.internal.wait
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import cz.muni.fi.pv239.juliajamnicka.playlyst.BuildConfig
 
 class SavePlaylistFragment : Fragment() {
 
@@ -65,9 +67,7 @@ class SavePlaylistFragment : Fragment() {
                 adapter.apply {
                     if (position == selectedPosition) {
                         selectedPosition = RecyclerView.NO_POSITION
-                        spotifyRepository.pauseSong(success = {}, fail = {
-                            Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
-                        })
+                        spotifyAppRemote?.playerApi?.pause()
                     } else if (position < selectedPosition) {
                         selectedPosition--
                     }
@@ -80,13 +80,9 @@ class SavePlaylistFragment : Fragment() {
                 val position = chosenSongs.indexOf(song)
 
                 if (position == adapter.selectedPosition) {
-                    spotifyRepository.pauseSong(success = {}, fail = {
-                        Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
-                    })
+                    spotifyAppRemote?.playerApi?.pause()
                 } else {
-                    spotifyRepository.playSong(song, success = {}, fail = {
-                        Toast.makeText(context, "Playback error", Toast.LENGTH_SHORT).show()
-                    })
+                    spotifyAppRemote?.playerApi?.play(song.uri)
                 }
             }
         )
@@ -103,13 +99,32 @@ class SavePlaylistFragment : Fragment() {
 
     private var playlistImage: Bitmap? = null
 
+    private var spotifyAppRemote: SpotifyAppRemote? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSavePlaylistBinding.inflate(inflater, container, false)
 
+        initializeSpotifyAppRemote()
+
         return binding.root
+    }
+
+    private fun initializeSpotifyAppRemote() {
+        SpotifyAppRemote.connect(
+            requireContext(), ConnectionParams.Builder(BuildConfig.SPOTIFY_CLIENT_ID)
+            .setRedirectUri(BuildConfig.REDIRECT_URI)
+            .showAuthView(false)
+            .build(),
+            object : Connector.ConnectionListener {
+                override fun onConnected(appRemote: SpotifyAppRemote) {
+                    spotifyAppRemote = appRemote
+                }
+
+                override fun onFailure(throwable: Throwable) {}
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
